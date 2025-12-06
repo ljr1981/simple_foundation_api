@@ -56,6 +56,18 @@ feature {NONE} -- Initialization
 			run_test (agent tests.test_hmac_sha256, "test_hmac_sha256")
 			run_test (agent tests.test_hmac_sha256_bytes, "test_hmac_sha256_bytes")
 
+			-- Security Tests
+			io.put_string ("%NSecurity Tests%N")
+			io.put_string ("--------------%N")
+			run_test (agent tests.test_secure_compare_equal, "test_secure_compare_equal")
+			run_test (agent tests.test_secure_compare_different, "test_secure_compare_different")
+
+			-- Base64 Bytes Tests
+			io.put_string ("%NBase64 Bytes Tests%N")
+			io.put_string ("-------------------%N")
+			run_test (agent tests.test_base64_encode_bytes, "test_base64_encode_bytes")
+			run_test (agent tests.test_base64_encode_bytes_empty, "test_base64_encode_bytes_empty")
+
 			-- UUID Tests
 			io.put_string ("%NUUID Tests%N")
 			io.put_string ("----------%N")

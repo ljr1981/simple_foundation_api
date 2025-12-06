@@ -13,7 +13,7 @@
 		<setting name="console_application" value="true"/>
 		<setting name="dead_code_removal" value="feature"/>
 		<capability>
-			<concurrency support="scoop" use="thread"/>
+			<concurrency support="thread"/>
 		</capability>
 		<library name="base" location="$ISE_LIBRARY\library\base\base.ecf"/>
 		<library name="simple_base64" location="$SIMPLE_BASE64\simple_base64.ecf"/>

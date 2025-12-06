@@ -89,12 +89,14 @@ end
 ### Base64
 - `base64_encode`, `base64_decode`
 - `base64_url_encode`, `base64_url_decode`
+- `base64_encode_bytes` - Encode byte arrays (for binary data)
 
 ### Hashing
 - `sha256`, `sha256_bytes`
 - `sha1`, `sha1_bytes`
 - `md5`, `md5_bytes`
 - `hmac_sha256`, `hmac_sha256_bytes`
+- `secure_compare` - Constant-time string comparison (timing-attack safe)
 
 ### UUID
 - `new_uuid`, `new_uuid_compact`

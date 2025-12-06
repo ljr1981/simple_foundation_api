@@ -199,6 +199,62 @@ feature -- HMAC Tests
 			assert_integers_equal ("byte_count", 32, f.hmac_sha256_bytes ("key", "message").count)
 		end
 
+feature -- Security Tests
+
+	test_secure_compare_equal
+			-- Test secure compare with equal strings.
+		note
+			testing: "covers/{FOUNDATION}.secure_compare"
+		local
+			f: FOUNDATION
+		do
+			create f.make
+			assert_true ("equal_strings", f.secure_compare ("secret123", "secret123"))
+			assert_true ("equal_empty", f.secure_compare ("", ""))
+		end
+
+	test_secure_compare_different
+			-- Test secure compare with different strings.
+		note
+			testing: "covers/{FOUNDATION}.secure_compare"
+		local
+			f: FOUNDATION
+		do
+			create f.make
+			assert_false ("different_strings", f.secure_compare ("secret123", "secret456"))
+			assert_false ("different_length", f.secure_compare ("short", "longer"))
+		end
+
+feature -- Base64 Bytes Tests
+
+	test_base64_encode_bytes
+			-- Test Base64 encoding of byte array.
+		note
+			testing: "covers/{FOUNDATION}.base64_encode_bytes"
+		local
+			f: FOUNDATION
+			bytes: ARRAY [NATURAL_8]
+			encoded: STRING
+		do
+			create f.make
+			bytes := <<72, 101, 108, 108, 111>>  -- "Hello" as bytes
+			encoded := f.base64_encode_bytes (bytes)
+			assert_strings_equal ("hello_bytes", "SGVsbG8=", encoded)
+		end
+
+	test_base64_encode_bytes_empty
+			-- Test Base64 encoding of empty byte array.
+		note
+			testing: "covers/{FOUNDATION}.base64_encode_bytes"
+		local
+			f: FOUNDATION
+			bytes: ARRAY [NATURAL_8]
+		do
+			create f.make
+			create bytes.make_empty
+			assert_strings_equal ("empty_bytes", "", f.base64_encode_bytes (bytes))
+		end
+
 feature -- UUID Tests
 
 	test_new_uuid_format

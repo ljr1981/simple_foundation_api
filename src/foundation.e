@@ -102,6 +102,16 @@ feature -- Base64 Encoding
 			result_not_void: Result /= Void
 		end
 
+	base64_encode_bytes (a_bytes: ARRAY [NATURAL_8]): STRING
+			-- Encode byte array `a_bytes' to Base64 string.
+		require
+			bytes_not_void: a_bytes /= Void
+		do
+			Result := encoder.encode_bytes (a_bytes)
+		ensure
+			result_not_void: Result /= Void
+		end
+
 feature -- Hashing: SHA-256
 
 	sha256 (a_input: STRING): STRING
@@ -205,6 +215,18 @@ feature -- Hashing: HMAC
 		ensure
 			result_not_void: Result /= Void
 			correct_length: Result.count = 32
+		end
+
+feature -- Hashing: Security
+
+	secure_compare (a_str1, a_str2: STRING): BOOLEAN
+			-- Compare two strings in constant time to prevent timing attacks.
+			-- Use for comparing hashes, tokens, or secrets.
+		require
+			str1_not_void: a_str1 /= Void
+			str2_not_void: a_str2 /= Void
+		do
+			Result := hasher.secure_compare (a_str1, a_str2)
 		end
 
 feature -- UUID Generation
