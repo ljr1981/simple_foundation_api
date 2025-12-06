@@ -8,7 +8,7 @@
 
 ## Overview
 
-`simple_foundation_api` is a unified facade that bundles essential foundation libraries for any Eiffel project. Instead of managing multiple library dependencies, use a single `FOUNDATION` class that provides access to encoding, hashing, UUID generation, JSON handling, CSV processing, markdown conversion, validation, and more.
+`simple_foundation_api` is a unified facade that bundles essential foundation libraries for any Eiffel project. Instead of managing multiple library dependencies, use a single `FOUNDATION_API` class that provides access to encoding, hashing, UUID generation, JSON handling, CSV processing, markdown conversion, validation, and more.
 
 ## Features
 
@@ -53,34 +53,34 @@ This library bundles the following simple_* libraries:
 
 ```eiffel
 local
-    foundation: FOUNDATION
+    api: FOUNDATION_API
 do
-    create foundation.make
+    create api.make
 
     -- Base64 encoding
-    foundation.base64_encode ("Hello")  -- "SGVsbG8="
+    api.base64_encode ("Hello")  -- "SGVsbG8="
 
     -- SHA-256 hashing
-    foundation.sha256 ("data")
+    api.sha256 ("data")
 
     -- UUID generation
-    foundation.new_uuid  -- "550e8400-e29b-41d4-a716-446655440000"
+    api.new_uuid  -- "550e8400-e29b-41d4-a716-446655440000"
 
     -- JSON parsing
-    if attached foundation.parse_json ("{%"name%": %"test%"}") as json then
+    if attached api.parse_json ("{%"name%": %"test%"}") as json then
         ...
     end
 
     -- Markdown conversion
-    foundation.markdown_to_html ("# Hello World")
+    api.markdown_to_html ("# Hello World")
 
     -- Validation
-    if foundation.is_valid_email ("test@example.com") then
+    if api.is_valid_email ("test@example.com") then
         ...
     end
 
     -- Random generation
-    foundation.random_integer_in_range (1, 100)
+    api.random_integer_in_range (1, 100)
 end
 ```
 
