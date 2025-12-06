@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>simple_foundation_api - Unified Foundation Library for Eiffel</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <img src="images/logo.png" alt="simple_* logo" class="logo">
+        </div>
+        <h1>simple_foundation_api</h1>
+        <p class="tagline">Unified Foundation Library for Eiffel Projects</p>
+        <div class="badges">
+            <span class="badge badge-version">v1.0.0</span>
+            <span class="badge badge-license">MIT</span>
+        </div>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="#overview">Overview</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#installation">Installation</a></li>
+            <li><a href="#usage">Usage</a></li>
+            <li><a href="#api">API Reference</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section id="overview">
+            <h2>Overview</h2>
+            <p>
+                <strong>simple_foundation_api</strong> is a unified facade that bundles essential
+                foundation libraries for any Eiffel project. Instead of managing multiple library
+                dependencies, use a single FOUNDATION class that provides access to:
+            </p>
+            <ul>
+                <li>Base64 encoding/decoding</li>
+                <li>Cryptographic hashing (SHA-256, SHA-1, MD5, HMAC)</li>
+                <li>UUID generation and validation</li>
+                <li>JSON parsing and building</li>
+                <li>CSV parsing and generation</li>
+                <li>Markdown to HTML conversion</li>
+                <li>Data validation with fluent API</li>
+                <li>Process execution</li>
+                <li>Random data generation</li>
+            </ul>
+        </section>
+
+        <section id="features">
+            <h2>Features</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>Base64</h4>
+                    <p>Standard and URL-safe Base64 encoding and decoding</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Hashing</h4>
+                    <p>SHA-256, SHA-1, MD5, and HMAC-SHA256 algorithms</p>
+                </div>
+                <div class="feature-card">
+                    <h4>UUID</h4>
+                    <p>Generate v4 UUIDs in standard and compact formats</p>
+                </div>
+                <div class="feature-card">
+                    <h4>JSON</h4>
+                    <p>Parse, validate, and build JSON with JSONPath queries</p>
+                </div>
+                <div class="feature-card">
+                    <h4>CSV</h4>
+                    <p>Parse and generate CSV data with header support</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Markdown</h4>
+                    <p>Convert Markdown to HTML with table of contents</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Validation</h4>
+                    <p>Fluent data validation with chainable rules</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Random</h4>
+                    <p>Generate random integers, strings, words, and UUIDs</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="installation">
+            <h2>Installation</h2>
+            <p>Add simple_foundation_api to your ECF configuration file:</p>
+            <pre><code>&lt;library name="simple_foundation_api"
+        location="$SIMPLE_FOUNDATION_API\simple_foundation_api.ecf"/&gt;</code></pre>
+
+            <h3>Environment Variables</h3>
+            <p>Set the following environment variables:</p>
+            <pre><code>SIMPLE_FOUNDATION_API=path/to/simple_foundation_api
+SIMPLE_BASE64=path/to/simple_base64
+SIMPLE_HASH=path/to/simple_hash
+SIMPLE_UUID=path/to/simple_uuid
+SIMPLE_JSON=path/to/simple_json
+SIMPLE_CSV=path/to/simple_csv
+SIMPLE_MARKDOWN=path/to/simple_markdown
+SIMPLE_VALIDATION=path/to/simple_validation
+SIMPLE_PROCESS=path/to/simple_process
+SIMPLE_RANDOMIZER=path/to/simple_randomizer</code></pre>
+        </section>
+
+        <section id="usage">
+            <h2>Quick Start</h2>
+            <div class="quick-start">
+                <pre><code><span class="keyword">local</span>
+    foundation: <span class="type">FOUNDATION</span>
+<span class="keyword">do</span>
+    <span class="keyword">create</span> foundation.<span class="feature">make</span>
+
+    <span class="comment">-- Base64 encoding</span>
+    foundation.<span class="feature">base64_encode</span> (<span class="string">"Hello"</span>)  <span class="comment">-- "SGVsbG8="</span>
+
+    <span class="comment">-- SHA-256 hashing</span>
+    foundation.<span class="feature">sha256</span> (<span class="string">"data"</span>)
+
+    <span class="comment">-- UUID generation</span>
+    foundation.<span class="feature">new_uuid</span>  <span class="comment">-- "550e8400-e29b-41d4-a716-446655440000"</span>
+
+    <span class="comment">-- JSON parsing</span>
+    <span class="keyword">if</span> <span class="keyword">attached</span> foundation.<span class="feature">parse_json</span> (<span class="string">"{%"name%": %"test%"}"</span>) <span class="keyword">as</span> json <span class="keyword">then</span>
+        ...
+    <span class="keyword">end</span>
+
+    <span class="comment">-- Markdown conversion</span>
+    foundation.<span class="feature">markdown_to_html</span> (<span class="string">"# Hello World"</span>)
+
+    <span class="comment">-- Validation</span>
+    <span class="keyword">if</span> foundation.<span class="feature">is_valid_email</span> (<span class="string">"test@example.com"</span>) <span class="keyword">then</span>
+        ...
+    <span class="keyword">end</span>
+
+    <span class="comment">-- Random generation</span>
+    foundation.<span class="feature">random_integer_in_range</span> (1, 100)
+<span class="keyword">end</span></code></pre>
+            </div>
+        </section>
+
+        <section id="api">
+            <h2>API Reference</h2>
+
+            <div class="api-section">
+                <h3>Base64 Operations</h3>
+                <div class="signature">base64_encode (a_input: STRING): STRING</div>
+                <div class="signature">base64_decode (a_encoded: STRING): STRING</div>
+                <div class="signature">base64_url_encode (a_input: STRING): STRING</div>
+                <div class="signature">base64_url_decode (a_encoded: STRING): STRING</div>
+            </div>
+
+            <div class="api-section">
+                <h3>Hashing Operations</h3>
+                <div class="signature">sha256 (a_input: STRING): STRING</div>
+                <div class="signature">sha1 (a_input: STRING): STRING</div>
+                <div class="signature">md5 (a_input: STRING): STRING</div>
+                <div class="signature">hmac_sha256 (a_key, a_message: STRING): STRING</div>
+            </div>
+
+            <div class="api-section">
+                <h3>UUID Operations</h3>
+                <div class="signature">new_uuid: STRING</div>
+                <div class="signature">new_uuid_compact: STRING</div>
+                <div class="signature">is_valid_uuid (a_string: STRING): BOOLEAN</div>
+            </div>
+
+            <div class="api-section">
+                <h3>JSON Operations</h3>
+                <div class="signature">parse_json (a_json_text: STRING_32): detachable SIMPLE_JSON_VALUE</div>
+                <div class="signature">is_valid_json (a_json_text: STRING_32): BOOLEAN</div>
+                <div class="signature">new_json_object: SIMPLE_JSON_OBJECT</div>
+                <div class="signature">new_json_array: SIMPLE_JSON_ARRAY</div>
+            </div>
+
+            <div class="api-section">
+                <h3>CSV Operations</h3>
+                <div class="signature">parse_csv (a_csv_text: STRING)</div>
+                <div class="signature">csv_field (a_row, a_column: INTEGER): STRING</div>
+                <div class="signature">csv_row_count: INTEGER</div>
+                <div class="signature">csv_column_count: INTEGER</div>
+            </div>
+
+            <div class="api-section">
+                <h3>Markdown Operations</h3>
+                <div class="signature">markdown_to_html (a_markdown: STRING): STRING</div>
+                <div class="signature">markdown_to_html_fragment (a_markdown: STRING): STRING</div>
+            </div>
+
+            <div class="api-section">
+                <h3>Validation Operations</h3>
+                <div class="signature">new_validator: SIMPLE_VALIDATOR</div>
+                <div class="signature">is_valid_email (a_value: STRING): BOOLEAN</div>
+                <div class="signature">is_valid_url (a_value: STRING): BOOLEAN</div>
+            </div>
+
+            <div class="api-section">
+                <h3>Random Operations</h3>
+                <div class="signature">random_integer_in_range (a_lower, a_upper: INTEGER): INTEGER</div>
+                <div class="signature">random_alphanumeric_string (a_length: INTEGER): STRING</div>
+                <div class="signature">random_word: STRING</div>
+                <div class="signature">random_sentence: STRING</div>
+            </div>
+        </section>
+
+        <section id="dependencies">
+            <h2>Dependencies</h2>
+            <p>simple_foundation_api bundles the following libraries:</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Library</th>
+                        <th>Purpose</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>simple_base64</code></td>
+                        <td>Base64 encoding and decoding</td>
+                    </tr>
+                    <tr>
+                        <td><code>simple_hash</code></td>
+                        <td>Cryptographic hash functions</td>
+                    </tr>
+                    <tr>
+                        <td><code>simple_uuid</code></td>
+                        <td>UUID generation and validation</td>
+                    </tr>
+                    <tr>
+                        <td><code>simple_json</code></td>
+                        <td>JSON parsing and building</td>
+                    </tr>
+                    <tr>
+                        <td><code>simple_csv</code></td>
+                        <td>CSV parsing and generation</td>
+                    </tr>
+                    <tr>
+                        <td><code>simple_markdown</code></td>
+                        <td>Markdown to HTML conversion</td>
+                    </tr>
+                    <tr>
+                        <td><code>simple_validation</code></td>
+                        <td>Data validation with fluent API</td>
+                    </tr>
+                    <tr>
+                        <td><code>simple_process</code></td>
+                        <td>Shell command execution</td>
+                    </tr>
+                    <tr>
+                        <td><code>simple_randomizer</code></td>
+                        <td>Random data generation</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <footer>
+        <p>simple_foundation_api is part of the <a href="https://github.com/ljr1981">simple_*</a> library collection.</p>
+        <p class="copyright">&copy; 2024-2025 Larry Rix. MIT License.</p>
+    </footer>
+</body>
+</html>

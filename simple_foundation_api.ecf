@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<system xmlns="http://www.eiffel.com/developers/xml/configuration-1-23-0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.eiffel.com/developers/xml/configuration-1-23-0 http://www.eiffel.com/developers/xml/configuration-1-23-0.xsd" name="simple_foundation_api" uuid="A1B2C3D4-E5F6-4A7B-8C9D-0E1F2A3B4C5D" library_target="simple_foundation_api">
+	<description>Simple Foundation API - Unified facade for core Eiffel utilities</description>
+	<target name="simple_foundation_api">
+		<root all_classes="true"/>
+		<file_rule>
+			<exclude>/EIFGENs$</exclude>
+			<exclude>/\..*$</exclude>
+		</file_rule>
+		<option warning="warning">
+			<assertions precondition="true" postcondition="true" check="true" invariant="true" loop="true" supplier_precondition="true"/>
+		</option>
+		<setting name="console_application" value="true"/>
+		<setting name="dead_code_removal" value="feature"/>
+		<capability>
+			<concurrency support="scoop" use="thread"/>
+		</capability>
+		<library name="base" location="$ISE_LIBRARY\library\base\base.ecf"/>
+		<library name="simple_base64" location="$SIMPLE_BASE64\simple_base64.ecf"/>
+		<library name="simple_hash" location="$SIMPLE_HASH\simple_hash.ecf"/>
+		<library name="simple_uuid" location="$SIMPLE_UUID\simple_uuid.ecf"/>
+		<library name="simple_json" location="$SIMPLE_JSON\simple_json.ecf"/>
+		<library name="simple_csv" location="$SIMPLE_CSV\simple_csv.ecf"/>
+		<library name="simple_markdown" location="$SIMPLE_MARKDOWN\simple_markdown.ecf"/>
+		<library name="simple_validation" location="$SIMPLE_VALIDATION\simple_validation.ecf"/>
+		<library name="simple_process" location="$SIMPLE_PROCESS\simple_process.ecf"/>
+		<library name="simple_randomizer" location="$SIMPLE_RANDOMIZER\simple_randomizer.ecf"/>
+		<library name="simple_htmx" location="$SIMPLE_HTMX\simple_htmx.ecf"/>
+		<cluster name="src" location=".\src\" recursive="true"/>
+	</target>
+	<target name="simple_foundation_api_tests" extends="simple_foundation_api">
+		<root class="FOUNDATION_TEST_APP" feature="make"/>
+		<option warning="warning">
+			<assertions precondition="true" postcondition="true" check="true" invariant="true" loop="true" supplier_precondition="true"/>
+		</option>
+		<setting name="console_application" value="true"/>
+		<library name="testing" location="$ISE_LIBRARY\library\testing\testing.ecf"/>
+		<library name="testing_ext" location="$TESTING_EXT\testing_ext.ecf"/>
+		<cluster name="tests" location=".\tests\" recursive="true"/>
+	</target>
+</system>
