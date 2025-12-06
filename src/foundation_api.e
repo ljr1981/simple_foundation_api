@@ -13,6 +13,7 @@ note
 		- Process execution (simple_process)
 		- Random data generation (simple_randomizer)
 		- HTMX element generation (simple_htmx)
+		- Structured logging (simple_logger)
 
 		Usage:
 			create foundation.make
@@ -24,6 +25,8 @@ note
 			foundation.markdown_to_html ("# Hello")
 			foundation.new_validator.required.email.validate ("test@test.com")
 			foundation.random_integer_in_range (1, 100)
+			foundation.log.info ("Application started")
+			foundation.new_logger.info_fields ("Event", << ["user_id", "123"] >>)
 	]"
 	author: "Larry Rix"
 	date: "$Date$"
@@ -48,6 +51,7 @@ feature {NONE} -- Initialization
 			create markdown_converter.make
 			create process_helper
 			create randomizer.make
+			create logger_instance.make
 		ensure
 			hasher_ready: hasher /= Void
 			encoder_ready: encoder /= Void
@@ -57,6 +61,7 @@ feature {NONE} -- Initialization
 			markdown_ready: markdown_converter /= Void
 			process_ready: process_helper /= Void
 			randomizer_ready: randomizer /= Void
+			logger_ready: logger_instance /= Void
 		end
 
 feature -- Base64 Encoding
@@ -67,8 +72,6 @@ feature -- Base64 Encoding
 			input_not_void: a_input /= Void
 		do
 			Result := encoder.encode (a_input)
-		ensure
-			result_not_void: Result /= Void
 		end
 
 	base64_decode (a_encoded: STRING): STRING
@@ -77,8 +80,6 @@ feature -- Base64 Encoding
 			encoded_not_void: a_encoded /= Void
 		do
 			Result := encoder.decode (a_encoded)
-		ensure
-			result_not_void: Result /= Void
 		end
 
 	base64_url_encode (a_input: STRING): STRING
@@ -88,7 +89,6 @@ feature -- Base64 Encoding
 		do
 			Result := encoder.encode_url (a_input)
 		ensure
-			result_not_void: Result /= Void
 			url_safe: not Result.has ('+') and not Result.has ('/')
 		end
 
@@ -98,8 +98,6 @@ feature -- Base64 Encoding
 			encoded_not_void: a_encoded /= Void
 		do
 			Result := encoder.decode_url (a_encoded)
-		ensure
-			result_not_void: Result /= Void
 		end
 
 	base64_encode_bytes (a_bytes: ARRAY [NATURAL_8]): STRING
@@ -108,8 +106,6 @@ feature -- Base64 Encoding
 			bytes_not_void: a_bytes /= Void
 		do
 			Result := encoder.encode_bytes (a_bytes)
-		ensure
-			result_not_void: Result /= Void
 		end
 
 feature -- Hashing: SHA-256
@@ -121,7 +117,6 @@ feature -- Hashing: SHA-256
 		do
 			Result := hasher.sha256 (a_input)
 		ensure
-			result_not_void: Result /= Void
 			correct_length: Result.count = 64
 			lowercase_hex: across Result as c all c.item.is_lower or c.item.is_digit end
 		end
@@ -133,7 +128,6 @@ feature -- Hashing: SHA-256
 		do
 			Result := hasher.sha256_bytes (a_input)
 		ensure
-			result_not_void: Result /= Void
 			correct_length: Result.count = 32
 		end
 
@@ -147,7 +141,6 @@ feature -- Hashing: SHA-1
 		do
 			Result := hasher.sha1 (a_input)
 		ensure
-			result_not_void: Result /= Void
 			correct_length: Result.count = 40
 			lowercase_hex: across Result as c all c.item.is_lower or c.item.is_digit end
 		end
@@ -159,7 +152,6 @@ feature -- Hashing: SHA-1
 		do
 			Result := hasher.sha1_bytes (a_input)
 		ensure
-			result_not_void: Result /= Void
 			correct_length: Result.count = 20
 		end
 
@@ -173,7 +165,6 @@ feature -- Hashing: MD5
 		do
 			Result := hasher.md5 (a_input)
 		ensure
-			result_not_void: Result /= Void
 			correct_length: Result.count = 32
 			lowercase_hex: across Result as c all c.item.is_lower or c.item.is_digit end
 		end
@@ -185,7 +176,6 @@ feature -- Hashing: MD5
 		do
 			Result := hasher.md5_bytes (a_input)
 		ensure
-			result_not_void: Result /= Void
 			correct_length: Result.count = 16
 		end
 
@@ -200,7 +190,6 @@ feature -- Hashing: HMAC
 		do
 			Result := hasher.hmac_sha256 (a_key, a_message)
 		ensure
-			result_not_void: Result /= Void
 			correct_length: Result.count = 64
 		end
 
@@ -213,7 +202,6 @@ feature -- Hashing: HMAC
 		do
 			Result := hasher.hmac_sha256_bytes (a_key, a_message)
 		ensure
-			result_not_void: Result /= Void
 			correct_length: Result.count = 32
 		end
 
@@ -237,7 +225,6 @@ feature -- UUID Generation
 		do
 			Result := uuid_generator.new_v4_string
 		ensure
-			result_not_void: Result /= Void
 			correct_length: Result.count = 36
 			has_hyphens: Result.occurrences ('-') = 4
 		end
@@ -247,7 +234,6 @@ feature -- UUID Generation
 		do
 			Result := uuid_generator.new_v4_compact
 		ensure
-			result_not_void: Result /= Void
 			correct_length: Result.count = 32
 			no_hyphens: not Result.has ('-')
 		end
@@ -295,16 +281,12 @@ feature -- JSON Parsing
 			-- Create new JSON object builder.
 		do
 			Result := json_parser.new_object
-		ensure
-			result_not_void: Result /= Void
 		end
 
 	new_json_array: SIMPLE_JSON_ARRAY
 			-- Create new JSON array builder.
 		do
 			Result := json_parser.new_array
-		ensure
-			result_not_void: Result /= Void
 		end
 
 feature -- CSV Parsing
@@ -346,16 +328,12 @@ feature -- CSV Parsing
 			valid_column: a_column >= 1 and a_column <= csv_column_count
 		do
 			Result := csv_parser.field (a_row, a_column)
-		ensure
-			result_not_void: Result /= Void
 		end
 
 	csv_to_string: STRING
 			-- Generate CSV string from current data.
 		do
 			Result := csv_parser.to_csv
-		ensure
-			result_not_void: Result /= Void
 		end
 
 feature -- Markdown Conversion
@@ -366,8 +344,6 @@ feature -- Markdown Conversion
 			markdown_not_void: a_markdown /= Void
 		do
 			Result := markdown_converter.to_html (a_markdown)
-		ensure
-			result_not_void: Result /= Void
 		end
 
 	markdown_to_html_fragment (a_markdown: STRING): STRING
@@ -376,16 +352,12 @@ feature -- Markdown Conversion
 			markdown_not_void: a_markdown /= Void
 		do
 			Result := markdown_converter.to_html_fragment (a_markdown)
-		ensure
-			result_not_void: Result /= Void
 		end
 
 	markdown_table_of_contents: STRING
 			-- Generate HTML table of contents from last markdown conversion.
 		do
 			Result := markdown_converter.table_of_contents
-		ensure
-			result_not_void: Result /= Void
 		end
 
 feature -- Validation
@@ -395,8 +367,6 @@ feature -- Validation
 			-- Usage: new_validator.required.email.validate ("test@test.com")
 		do
 			create Result.make
-		ensure
-			result_not_void: Result /= Void
 		end
 
 	is_valid_email (a_value: STRING): BOOLEAN
@@ -429,8 +399,6 @@ feature -- Process Execution
 			command_not_empty: not a_command.is_empty
 		do
 			Result := process_helper.output_of_command (a_command, Void)
-		ensure
-			result_not_void: Result /= Void
 		end
 
 	execute_command_in_directory (a_command, a_directory: STRING_32): STRING_32
@@ -440,8 +408,6 @@ feature -- Process Execution
 			directory_not_empty: not a_directory.is_empty
 		do
 			Result := process_helper.output_of_command (a_command, a_directory)
-		ensure
-			result_not_void: Result /= Void
 		end
 
 	has_file_in_path (a_name: STRING): BOOLEAN
@@ -488,16 +454,12 @@ feature -- Random Generation
 			-- A random pronounceable word.
 		do
 			Result := randomizer.random_word
-		ensure
-			result_not_void: Result /= Void
 		end
 
 	random_sentence: STRING
 			-- A random sentence.
 		do
 			Result := randomizer.random_sentence
-		ensure
-			result_not_void: Result /= Void
 		end
 
 	random_alphanumeric_string (a_length: INTEGER): STRING
@@ -507,7 +469,6 @@ feature -- Random Generation
 		do
 			Result := randomizer.random_alphanumeric_string (a_length)
 		ensure
-			result_not_void: Result /= Void
 			correct_length: Result.count = a_length
 		end
 
@@ -515,8 +476,40 @@ feature -- Random Generation
 			-- A random UUID as string.
 		do
 			Result := randomizer.random_uuid_string
+		end
+
+feature -- Logging
+
+	new_logger: SIMPLE_LOGGER
+			-- Create new logger instance.
+		do
+			create Result.make
+		end
+
+	new_logger_with_level (a_level: INTEGER): SIMPLE_LOGGER
+			-- Create new logger with specified level.
+		require
+			valid_level: a_level >= {SIMPLE_LOGGER}.Level_debug and a_level <= {SIMPLE_LOGGER}.Level_fatal
+		do
+			create Result.make_with_level (a_level)
 		ensure
-			result_not_void: Result /= Void
+			level_set: Result.level = a_level
+		end
+
+	new_logger_to_file (a_path: STRING): SIMPLE_LOGGER
+			-- Create new logger outputting to file.
+		require
+			path_not_empty: not a_path.is_empty
+		do
+			create Result.make_to_file (a_path)
+		ensure
+			file_output: Result.is_file_output
+		end
+
+	log: SIMPLE_LOGGER
+			-- Shared logger instance for simple logging needs.
+		do
+			Result := logger_instance
 		end
 
 feature -- Utilities
@@ -528,7 +521,6 @@ feature -- Utilities
 		do
 			Result := hasher.bytes_to_hex (a_bytes)
 		ensure
-			result_not_void: Result /= Void
 			correct_length: Result.count = a_bytes.count * 2
 		end
 
@@ -540,7 +532,6 @@ feature -- Utilities
 		do
 			Result := hasher.hex_to_bytes (a_hex)
 		ensure
-			result_not_void: Result /= Void
 			correct_length: Result.count = a_hex.count // 2
 		end
 
@@ -576,6 +567,12 @@ feature -- Direct Access
 			Result := randomizer
 		end
 
+	logger: SIMPLE_LOGGER
+			-- Direct access to logger for advanced operations.
+		do
+			Result := logger_instance
+		end
+
 feature {NONE} -- Implementation
 
 	hasher: SIMPLE_HASH
@@ -600,6 +597,9 @@ feature {NONE} -- Implementation
 			-- Process execution helper.
 
 	randomizer: SIMPLE_RANDOMIZER
+
+	logger_instance: SIMPLE_LOGGER
+			-- Shared logging engine.
 			-- Random data generator.
 
 invariant
@@ -611,5 +611,6 @@ invariant
 	markdown_exists: markdown_converter /= Void
 	process_exists: process_helper /= Void
 	randomizer_exists: randomizer /= Void
+	logger_exists: logger_instance /= Void
 
 end

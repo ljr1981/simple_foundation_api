@@ -26,6 +26,7 @@
 		<library name="simple_process" location="$SIMPLE_PROCESS\simple_process.ecf"/>
 		<library name="simple_randomizer" location="$SIMPLE_RANDOMIZER\simple_randomizer.ecf"/>
 		<library name="simple_htmx" location="$SIMPLE_HTMX\simple_htmx.ecf"/>
+		<library name="simple_logger" location="$SIMPLE_LOGGER\simple_logger.ecf"/>
 		<cluster name="src" location=".\src\" recursive="true"/>
 	</target>
 	<target name="simple_foundation_api_tests" extends="simple_foundation_api">
