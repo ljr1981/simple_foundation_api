@@ -16,6 +16,7 @@ note
 		- Structured logging (simple_logger)
 		- XML parsing/building (simple_xml)
 		- Date/time operations (simple_datetime)
+		- Regular expressions (simple_regex)
 
 		Usage:
 			create foundation.make
@@ -33,6 +34,9 @@ note
 			foundation.new_date (2025, 12, 7).to_iso8601
 			foundation.today.plus_days (7)
 			foundation.new_duration (0, 2, 30, 0).to_human
+			foundation.regex_match ("\d+", "abc123").value -- "123"
+			foundation.regex_replace_all ("\s+", "a  b  c", " ") -- "a b c"
+			foundation.is_valid_email_pattern ("user@example.com") -- True
 	]"
 	author: "Larry Rix"
 	date: "$Date$"
@@ -59,6 +63,8 @@ feature {NONE} -- Initialization
 			create randomizer.make
 			create logger_instance.make
 			create xml_processor.make
+			create regex_engine.make
+			create regex_patterns_instance.make
 		ensure
 			hasher_ready: hasher /= Void
 			encoder_ready: encoder /= Void
@@ -70,6 +76,8 @@ feature {NONE} -- Initialization
 			randomizer_ready: randomizer /= Void
 			logger_ready: logger_instance /= Void
 			xml_ready: xml_processor /= Void
+			regex_ready: regex_engine /= Void
+			regex_patterns_ready: regex_patterns_instance /= Void
 		end
 
 feature -- Base64 Encoding
@@ -637,6 +645,214 @@ feature -- DateTime Operations
 			create Result.make_now
 		end
 
+feature -- Regular Expressions: Matching
+
+	regex_match (a_pattern, a_subject: READABLE_STRING_GENERAL): SIMPLE_REGEX_MATCH
+			-- Match `a_pattern' against `a_subject'.
+		require
+			pattern_attached: a_pattern /= Void
+			subject_attached: a_subject /= Void
+		do
+			regex_engine.compile (a_pattern)
+			if regex_engine.is_compiled then
+				Result := regex_engine.match (a_subject)
+			else
+				create Result.make_not_matched (a_subject)
+			end
+		ensure
+			result_attached: Result /= Void
+		end
+
+	regex_match_all (a_pattern, a_subject: READABLE_STRING_GENERAL): SIMPLE_REGEX_MATCH_LIST
+			-- Find all matches of `a_pattern' in `a_subject'.
+		require
+			pattern_attached: a_pattern /= Void
+			subject_attached: a_subject /= Void
+		do
+			regex_engine.compile (a_pattern)
+			if regex_engine.is_compiled then
+				Result := regex_engine.match_all (a_subject)
+			else
+				create Result.make (a_subject)
+			end
+		ensure
+			result_attached: Result /= Void
+		end
+
+	regex_matches (a_pattern, a_subject: READABLE_STRING_GENERAL): BOOLEAN
+			-- Does `a_subject' contain a match for `a_pattern'?
+		require
+			pattern_attached: a_pattern /= Void
+			subject_attached: a_subject /= Void
+		do
+			Result := regex_engine.matches_pattern (a_pattern, a_subject)
+		end
+
+	regex_first_match (a_pattern, a_subject: READABLE_STRING_GENERAL): detachable STRING_32
+			-- First matching substring, or Void if no match.
+		require
+			pattern_attached: a_pattern /= Void
+			subject_attached: a_subject /= Void
+		do
+			Result := regex_engine.first_match_for (a_pattern, a_subject)
+		end
+
+	regex_all_matches (a_pattern, a_subject: READABLE_STRING_GENERAL): ARRAYED_LIST [STRING_32]
+			-- All matching substrings.
+		require
+			pattern_attached: a_pattern /= Void
+			subject_attached: a_subject /= Void
+		do
+			Result := regex_engine.all_matches_for (a_pattern, a_subject)
+		ensure
+			result_attached: Result /= Void
+		end
+
+feature -- Regular Expressions: Replace
+
+	regex_replace (a_pattern, a_subject, a_replacement: READABLE_STRING_GENERAL): STRING_32
+			-- Replace first match of `a_pattern' in `a_subject' with `a_replacement'.
+		require
+			pattern_attached: a_pattern /= Void
+			subject_attached: a_subject /= Void
+			replacement_attached: a_replacement /= Void
+		do
+			Result := regex_engine.replace_first_match (a_pattern, a_subject, a_replacement)
+		ensure
+			result_attached: Result /= Void
+		end
+
+	regex_replace_all (a_pattern, a_subject, a_replacement: READABLE_STRING_GENERAL): STRING_32
+			-- Replace all matches of `a_pattern' in `a_subject' with `a_replacement'.
+		require
+			pattern_attached: a_pattern /= Void
+			subject_attached: a_subject /= Void
+			replacement_attached: a_replacement /= Void
+		do
+			Result := regex_engine.replace_all_matches (a_pattern, a_subject, a_replacement)
+		ensure
+			result_attached: Result /= Void
+		end
+
+feature -- Regular Expressions: Split
+
+	regex_split (a_pattern, a_subject: READABLE_STRING_GENERAL): ARRAYED_LIST [STRING_32]
+			-- Split `a_subject' by `a_pattern'.
+		require
+			pattern_attached: a_pattern /= Void
+			subject_attached: a_subject /= Void
+		do
+			Result := regex_engine.split_by_pattern (a_pattern, a_subject)
+		ensure
+			result_attached: Result /= Void
+			at_least_one: Result.count >= 1
+		end
+
+feature -- Regular Expressions: Pattern Validation
+
+	is_valid_regex (a_pattern: READABLE_STRING_GENERAL): BOOLEAN
+			-- Is `a_pattern' a valid regular expression?
+		require
+			pattern_attached: a_pattern /= Void
+		do
+			Result := regex_engine.is_valid_pattern (a_pattern)
+		end
+
+	regex_escape (a_literal: READABLE_STRING_GENERAL): STRING_32
+			-- Escape special regex characters in `a_literal' for literal matching.
+		require
+			literal_attached: a_literal /= Void
+		do
+			Result := regex_engine.escape (a_literal)
+		ensure
+			result_attached: Result /= Void
+		end
+
+feature -- Regular Expressions: Common Pattern Validation
+
+	is_valid_email_pattern (a_text: READABLE_STRING_GENERAL): BOOLEAN
+			-- Does `a_text' match email pattern?
+		require
+			text_attached: a_text /= Void
+		do
+			Result := regex_patterns_instance.is_email (a_text)
+		end
+
+	is_valid_url_pattern (a_text: READABLE_STRING_GENERAL): BOOLEAN
+			-- Does `a_text' match URL pattern?
+		require
+			text_attached: a_text /= Void
+		do
+			Result := regex_patterns_instance.is_url (a_text)
+		end
+
+	is_valid_ipv4 (a_text: READABLE_STRING_GENERAL): BOOLEAN
+			-- Does `a_text' match IPv4 address pattern?
+		require
+			text_attached: a_text /= Void
+		do
+			Result := regex_patterns_instance.is_ipv4 (a_text)
+		end
+
+	is_valid_uuid_pattern (a_text: READABLE_STRING_GENERAL): BOOLEAN
+			-- Does `a_text' match UUID pattern?
+		require
+			text_attached: a_text /= Void
+		do
+			Result := regex_patterns_instance.is_uuid (a_text)
+		end
+
+	is_valid_date_iso (a_text: READABLE_STRING_GENERAL): BOOLEAN
+			-- Does `a_text' match ISO date pattern (YYYY-MM-DD)?
+		require
+			text_attached: a_text /= Void
+		do
+			Result := regex_patterns_instance.is_date_iso (a_text)
+		end
+
+	is_strong_password (a_text: READABLE_STRING_GENERAL): BOOLEAN
+			-- Does `a_text' meet strong password requirements?
+			-- (8+ chars, uppercase, lowercase, digit, special char)
+		require
+			text_attached: a_text /= Void
+		do
+			Result := regex_patterns_instance.is_strong_password (a_text)
+		end
+
+feature -- Regular Expressions: Builder
+
+	new_regex_builder: SIMPLE_REGEX_BUILDER
+			-- Create new fluent regex pattern builder.
+		do
+			create Result.make
+		ensure
+			result_attached: Result /= Void
+		end
+
+	new_regex (a_pattern: READABLE_STRING_GENERAL): SIMPLE_REGEX
+			-- Create compiled regex from pattern.
+		require
+			pattern_attached: a_pattern /= Void
+		do
+			create Result.make_from_pattern (a_pattern)
+		ensure
+			result_attached: Result /= Void
+		end
+
+feature -- Regular Expressions: Direct Access
+
+	regex: SIMPLE_REGEX
+			-- Direct access to regex engine for advanced operations.
+		do
+			Result := regex_engine
+		end
+
+	regex_patterns: SIMPLE_REGEX_PATTERNS
+			-- Direct access to common patterns library.
+		do
+			Result := regex_patterns_instance
+		end
+
 feature -- Utilities
 
 	bytes_to_hex (a_bytes: ARRAY [NATURAL_8]): STRING
@@ -735,6 +951,12 @@ feature {NONE} -- Implementation
 	xml_processor: SIMPLE_XML
 			-- XML parsing/building engine.
 
+	regex_engine: SIMPLE_REGEX
+			-- Regular expression engine.
+
+	regex_patterns_instance: SIMPLE_REGEX_PATTERNS
+			-- Common regex patterns library.
+
 invariant
 	hasher_exists: hasher /= Void
 	encoder_exists: encoder /= Void
@@ -746,5 +968,7 @@ invariant
 	randomizer_exists: randomizer /= Void
 	logger_exists: logger_instance /= Void
 	xml_exists: xml_processor /= Void
+	regex_exists: regex_engine /= Void
+	regex_patterns_exists: regex_patterns_instance /= Void
 
 end

@@ -29,6 +29,7 @@
 		<library name="simple_uuid" location="$SIMPLE_UUID\simple_uuid.ecf"/>
 		<library name="simple_validation" location="$SIMPLE_VALIDATION\simple_validation.ecf"/>
 		<library name="simple_xml" location="$SIMPLE_XML\simple_xml.ecf"/>
+		<library name="simple_regex" location="$SIMPLE_REGEX\simple_regex.ecf"/>
 		<cluster name="src" location=".\src\" recursive="true"/>
 	</target>
 	<target name="simple_foundation_api_tests" extends="simple_foundation_api">
