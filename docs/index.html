@@ -44,7 +44,12 @@
                 <li>JSON parsing and building</li>
                 <li>CSV parsing and generation</li>
                 <li>Markdown to HTML conversion</li>
+                <li>XML parsing and building</li>
                 <li>Data validation with fluent API</li>
+                <li>Regular expressions with fluent builder</li>
+                <li>Date/time manipulation and formatting</li>
+                <li>Structured logging with JSON output</li>
+                <li>HTMX component generation</li>
                 <li>Process execution</li>
                 <li>Random data generation</li>
             </ul>
@@ -85,6 +90,26 @@
                     <h4>Random</h4>
                     <p>Generate random integers, strings, words, and UUIDs</p>
                 </div>
+                <div class="feature-card">
+                    <h4>XML</h4>
+                    <p>Parse, query, and build XML documents with XPath</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Regex</h4>
+                    <p>Pattern matching, replacement, and fluent builder API</p>
+                </div>
+                <div class="feature-card">
+                    <h4>DateTime</h4>
+                    <p>Date/time manipulation, formatting, age and duration calculations</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Logger</h4>
+                    <p>Structured logging with levels, fields, and JSON output</p>
+                </div>
+                <div class="feature-card">
+                    <h4>HTMX</h4>
+                    <p>Generate HTMX-enabled HTML components</p>
+                </div>
             </div>
         </section>
 
@@ -98,14 +123,19 @@
             <p>Set the following environment variables:</p>
             <pre><code>SIMPLE_FOUNDATION_API=path/to/simple_foundation_api
 SIMPLE_BASE64=path/to/simple_base64
-SIMPLE_HASH=path/to/simple_hash
-SIMPLE_UUID=path/to/simple_uuid
-SIMPLE_JSON=path/to/simple_json
 SIMPLE_CSV=path/to/simple_csv
+SIMPLE_DATETIME=path/to/simple_datetime
+SIMPLE_HASH=path/to/simple_hash
+SIMPLE_HTMX=path/to/simple_htmx
+SIMPLE_JSON=path/to/simple_json
+SIMPLE_LOGGER=path/to/simple_logger
 SIMPLE_MARKDOWN=path/to/simple_markdown
-SIMPLE_VALIDATION=path/to/simple_validation
 SIMPLE_PROCESS=path/to/simple_process
-SIMPLE_RANDOMIZER=path/to/simple_randomizer</code></pre>
+SIMPLE_RANDOMIZER=path/to/simple_randomizer
+SIMPLE_REGEX=path/to/simple_regex
+SIMPLE_UUID=path/to/simple_uuid
+SIMPLE_VALIDATION=path/to/simple_validation
+SIMPLE_XML=path/to/simple_xml</code></pre>
         </section>
 
         <section id="usage">
@@ -206,6 +236,52 @@ SIMPLE_RANDOMIZER=path/to/simple_randomizer</code></pre>
                 <div class="signature">random_word: STRING</div>
                 <div class="signature">random_sentence: STRING</div>
             </div>
+
+            <div class="api-section">
+                <h3>XML Operations</h3>
+                <div class="signature">parse_xml (a_xml_text: STRING): detachable SIMPLE_XML_DOCUMENT</div>
+                <div class="signature">build_xml: SIMPLE_XML_BUILDER</div>
+                <div class="signature">new_xml_document: SIMPLE_XML_DOCUMENT</div>
+            </div>
+
+            <div class="api-section">
+                <h3>Regex Operations</h3>
+                <div class="signature">regex_match (a_pattern, a_subject: STRING): SIMPLE_REGEX_MATCH</div>
+                <div class="signature">regex_match_all (a_pattern, a_subject: STRING): SIMPLE_REGEX_MATCH_LIST</div>
+                <div class="signature">regex_replace_all (a_pattern, a_subject, a_replacement: STRING): STRING</div>
+                <div class="signature">regex_split (a_pattern, a_subject: STRING): ARRAYED_LIST [STRING]</div>
+                <div class="signature">new_regex_builder: SIMPLE_REGEX_BUILDER</div>
+                <div class="signature">is_valid_email_pattern (a_value: STRING): BOOLEAN</div>
+                <div class="signature">is_valid_url_pattern (a_value: STRING): BOOLEAN</div>
+                <div class="signature">is_valid_ipv4 (a_value: STRING): BOOLEAN</div>
+                <div class="signature">is_valid_uuid (a_value: STRING): BOOLEAN</div>
+            </div>
+
+            <div class="api-section">
+                <h3>DateTime Operations</h3>
+                <div class="signature">new_date (a_year, a_month, a_day: INTEGER): SIMPLE_DATE</div>
+                <div class="signature">new_time (a_hour, a_minute, a_second: INTEGER): SIMPLE_TIME</div>
+                <div class="signature">new_datetime_now: SIMPLE_DATE_TIME</div>
+                <div class="signature">new_duration (a_days, a_hours, a_minutes, a_seconds: INTEGER): SIMPLE_DURATION</div>
+                <div class="signature">new_age_from_birthdate (a_birthdate: SIMPLE_DATE): SIMPLE_AGE</div>
+                <div class="signature">new_date_range (a_start, a_end: SIMPLE_DATE): SIMPLE_DATE_RANGE</div>
+            </div>
+
+            <div class="api-section">
+                <h3>Logger Operations</h3>
+                <div class="signature">logger: SIMPLE_LOGGER</div>
+                <div class="signature">log_debug (a_message: STRING)</div>
+                <div class="signature">log_info (a_message: STRING)</div>
+                <div class="signature">log_warn (a_message: STRING)</div>
+                <div class="signature">log_error (a_message: STRING)</div>
+            </div>
+
+            <div class="api-section">
+                <h3>HTMX Operations</h3>
+                <div class="signature">htmx: SIMPLE_HTMX</div>
+                <div class="signature">htmx_button (a_text, a_target, a_endpoint: STRING): STRING</div>
+                <div class="signature">htmx_form (a_action, a_method: STRING): STRING</div>
+            </div>
         </section>
 
         <section id="dependencies">
@@ -224,28 +300,32 @@ SIMPLE_RANDOMIZER=path/to/simple_randomizer</code></pre>
                         <td>Base64 encoding and decoding</td>
                     </tr>
                     <tr>
+                        <td><code>simple_csv</code></td>
+                        <td>CSV parsing and generation</td>
+                    </tr>
+                    <tr>
+                        <td><code>simple_datetime</code></td>
+                        <td>Date, time, duration, and age calculations</td>
+                    </tr>
+                    <tr>
                         <td><code>simple_hash</code></td>
                         <td>Cryptographic hash functions</td>
                     </tr>
                     <tr>
-                        <td><code>simple_uuid</code></td>
-                        <td>UUID generation and validation</td>
+                        <td><code>simple_htmx</code></td>
+                        <td>HTMX-enabled HTML component generation</td>
                     </tr>
                     <tr>
                         <td><code>simple_json</code></td>
                         <td>JSON parsing and building</td>
                     </tr>
                     <tr>
-                        <td><code>simple_csv</code></td>
-                        <td>CSV parsing and generation</td>
+                        <td><code>simple_logger</code></td>
+                        <td>Structured logging with JSON output</td>
                     </tr>
                     <tr>
                         <td><code>simple_markdown</code></td>
                         <td>Markdown to HTML conversion</td>
-                    </tr>
-                    <tr>
-                        <td><code>simple_validation</code></td>
-                        <td>Data validation with fluent API</td>
                     </tr>
                     <tr>
                         <td><code>simple_process</code></td>
@@ -254,6 +334,22 @@ SIMPLE_RANDOMIZER=path/to/simple_randomizer</code></pre>
                     <tr>
                         <td><code>simple_randomizer</code></td>
                         <td>Random data generation</td>
+                    </tr>
+                    <tr>
+                        <td><code>simple_regex</code></td>
+                        <td>Regular expressions with fluent builder</td>
+                    </tr>
+                    <tr>
+                        <td><code>simple_uuid</code></td>
+                        <td>UUID generation and validation</td>
+                    </tr>
+                    <tr>
+                        <td><code>simple_validation</code></td>
+                        <td>Data validation with fluent API</td>
+                    </tr>
+                    <tr>
+                        <td><code>simple_xml</code></td>
+                        <td>XML parsing, querying, and building</td>
                     </tr>
                 </tbody>
             </table>
