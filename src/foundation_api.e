@@ -15,6 +15,7 @@ note
 		- HTMX element generation (simple_htmx)
 		- Structured logging (simple_logger)
 		- XML parsing/building (simple_xml)
+		- Date/time operations (simple_datetime)
 
 		Usage:
 			create foundation.make
@@ -29,6 +30,9 @@ note
 			foundation.log.info ("Application started")
 			foundation.new_logger.info_fields ("Event", << ["user_id", "123"] >>)
 			foundation.parse_xml ("<root><item>value</item></root>").text_at ("root/item")
+			foundation.new_date (2025, 12, 7).to_iso8601
+			foundation.today.plus_days (7)
+			foundation.new_duration (0, 2, 30, 0).to_human
 	]"
 	author: "Larry Rix"
 	date: "$Date$"
@@ -552,6 +556,85 @@ feature -- XML Processing
 			Result := xml_processor.new_document (a_root_name)
 		ensure
 			is_valid: Result.is_valid
+		end
+
+feature -- DateTime Operations
+
+	new_date (a_year, a_month, a_day: INTEGER): SIMPLE_DATE
+			-- Create date from year, month, day.
+		require
+			valid_month: a_month >= 1 and a_month <= 12
+			valid_day: a_day >= 1 and a_day <= 31
+		do
+			create Result.make (a_year, a_month, a_day)
+		end
+
+	new_time (a_hour, a_minute, a_second: INTEGER): SIMPLE_TIME
+			-- Create time from hour, minute, second.
+		require
+			valid_hour: a_hour >= 0 and a_hour <= 23
+			valid_minute: a_minute >= 0 and a_minute <= 59
+			valid_second: a_second >= 0 and a_second <= 59
+		do
+			create Result.make (a_hour, a_minute, a_second)
+		end
+
+	new_datetime (a_year, a_month, a_day, a_hour, a_minute, a_second: INTEGER): SIMPLE_DATE_TIME
+			-- Create datetime from components.
+		do
+			create Result.make (a_year, a_month, a_day, a_hour, a_minute, a_second)
+		end
+
+	new_duration (a_days, a_hours, a_minutes, a_seconds: INTEGER): SIMPLE_DURATION
+			-- Create duration from days, hours, minutes, seconds.
+		do
+			create Result.make (a_days, a_hours, a_minutes, a_seconds)
+		end
+
+	new_duration_seconds (a_seconds: INTEGER_64): SIMPLE_DURATION
+			-- Create duration from total seconds.
+		do
+			create Result.make_seconds (a_seconds)
+		end
+
+	new_date_range (a_start, a_end: SIMPLE_DATE): SIMPLE_DATE_RANGE
+			-- Create date range from start to end.
+		require
+			start_before_end: a_start.is_before (a_end) or a_start.is_equal (a_end)
+		do
+			create Result.make (a_start, a_end)
+		end
+
+	new_age (a_years, a_months, a_days: INTEGER): SIMPLE_AGE
+			-- Create age from years, months, days.
+		do
+			create Result.make (a_years, a_months, a_days)
+		end
+
+	age_from_dates (a_birth_date, a_reference_date: SIMPLE_DATE): SIMPLE_AGE
+			-- Calculate age from birth date to reference date.
+		require
+			birth_before_reference: a_birth_date.is_before (a_reference_date) or a_birth_date.is_equal (a_reference_date)
+		do
+			create Result.make_from_dates (a_birth_date, a_reference_date)
+		end
+
+	today: SIMPLE_DATE
+			-- Current date.
+		do
+			create Result.make_now
+		end
+
+	now: SIMPLE_TIME
+			-- Current time.
+		do
+			create Result.make_now
+		end
+
+	current_datetime: SIMPLE_DATE_TIME
+			-- Current date and time.
+		do
+			create Result.make_now
 		end
 
 feature -- Utilities

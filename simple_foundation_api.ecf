@@ -18,6 +18,7 @@
 		<library name="base" location="$ISE_LIBRARY\library\base\base.ecf"/>
 		<library name="simple_base64" location="$SIMPLE_BASE64\simple_base64.ecf"/>
 		<library name="simple_csv" location="$SIMPLE_CSV\simple_csv.ecf"/>
+		<library name="simple_datetime" location="$SIMPLE_DATETIME\simple_datetime.ecf"/>
 		<library name="simple_hash" location="$SIMPLE_HASH\simple_hash.ecf"/>
 		<library name="simple_htmx" location="$SIMPLE_HTMX\simple_htmx.ecf"/>
 		<library name="simple_json" location="$SIMPLE_JSON\simple_json.ecf"/>
@@ -26,8 +27,8 @@
 		<library name="simple_process" location="$SIMPLE_PROCESS\simple_process.ecf"/>
 		<library name="simple_randomizer" location="$SIMPLE_RANDOMIZER\simple_randomizer.ecf"/>
 		<library name="simple_uuid" location="$SIMPLE_UUID\simple_uuid.ecf"/>
-		<library name="simple_validation" location="D:\prod\simple_validation\simple_validation.ecf"/>
-		<library name="simple_xml" location="D:\prod\simple_xml\simple_xml.ecf"/>
+		<library name="simple_validation" location="$SIMPLE_VALIDATION\simple_validation.ecf"/>
+		<library name="simple_xml" location="$SIMPLE_XML\simple_xml.ecf"/>
 		<cluster name="src" location=".\src\" recursive="true"/>
 	</target>
 	<target name="simple_foundation_api_tests" extends="simple_foundation_api">
