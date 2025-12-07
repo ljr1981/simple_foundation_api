@@ -108,6 +108,13 @@ feature {NONE} -- Initialization
 			run_test (agent tests.test_is_valid_email, "test_is_valid_email")
 			run_test (agent tests.test_is_valid_url, "test_is_valid_url")
 
+			-- XML Tests
+			io.put_string ("%NXML Tests%N")
+			io.put_string ("---------%N")
+			run_test (agent tests.test_parse_xml, "test_parse_xml")
+			run_test (agent tests.test_build_xml, "test_build_xml")
+			run_test (agent tests.test_new_xml_document, "test_new_xml_document")
+
 			-- Random Tests
 			io.put_string ("%NRandom Tests%N")
 			io.put_string ("------------%N")

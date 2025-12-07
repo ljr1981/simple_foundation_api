@@ -482,6 +482,61 @@ feature -- Validation Tests
 			assert_false ("invalid_url", api.is_valid_url ("notaurl"))
 		end
 
+feature -- XML Tests
+
+	test_parse_xml
+			-- Test XML parsing.
+		note
+			testing: "covers/{FOUNDATION_API}.parse_xml"
+		local
+			api: FOUNDATION_API
+			doc: SIMPLE_XML_DOCUMENT
+		do
+			create api.make
+			doc := api.parse_xml ("<root><item>value</item></root>")
+			assert_true ("doc_valid", doc.is_valid)
+			if attached doc.root as l_root then
+				assert_strings_equal ("root_name", "root", l_root.name)
+			else
+				assert_true ("has_root", False)
+			end
+		end
+
+	test_build_xml
+			-- Test XML building.
+		note
+			testing: "covers/{FOUNDATION_API}.build_xml"
+		local
+			api: FOUNDATION_API
+			builder: SIMPLE_XML_BUILDER
+			xml_string: STRING
+		do
+			create api.make
+			builder := api.build_xml ("root")
+			builder := builder.element ("item").text ("value").done
+			xml_string := builder.to_string
+			assert_true ("has_root", xml_string.has_substring ("<root"))
+			assert_true ("has_item", xml_string.has_substring ("<item>"))
+		end
+
+	test_new_xml_document
+			-- Test XML document creation.
+		note
+			testing: "covers/{FOUNDATION_API}.new_xml_document"
+		local
+			api: FOUNDATION_API
+			doc: SIMPLE_XML_DOCUMENT
+		do
+			create api.make
+			doc := api.new_xml_document ("config")
+			assert_true ("doc_valid", doc.is_valid)
+			if attached doc.root as l_root then
+				assert_strings_equal ("root_name", "config", l_root.name)
+			else
+				assert_true ("has_root", False)
+			end
+		end
+
 feature -- Random Tests
 
 	test_random_integer_in_range

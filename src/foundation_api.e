@@ -14,6 +14,7 @@ note
 		- Random data generation (simple_randomizer)
 		- HTMX element generation (simple_htmx)
 		- Structured logging (simple_logger)
+		- XML parsing/building (simple_xml)
 
 		Usage:
 			create foundation.make
@@ -27,6 +28,7 @@ note
 			foundation.random_integer_in_range (1, 100)
 			foundation.log.info ("Application started")
 			foundation.new_logger.info_fields ("Event", << ["user_id", "123"] >>)
+			foundation.parse_xml ("<root><item>value</item></root>").text_at ("root/item")
 	]"
 	author: "Larry Rix"
 	date: "$Date$"
@@ -52,6 +54,7 @@ feature {NONE} -- Initialization
 			create process_helper
 			create randomizer.make
 			create logger_instance.make
+			create xml_processor.make
 		ensure
 			hasher_ready: hasher /= Void
 			encoder_ready: encoder /= Void
@@ -62,6 +65,7 @@ feature {NONE} -- Initialization
 			process_ready: process_helper /= Void
 			randomizer_ready: randomizer /= Void
 			logger_ready: logger_instance /= Void
+			xml_ready: xml_processor /= Void
 		end
 
 feature -- Base64 Encoding
@@ -512,6 +516,44 @@ feature -- Logging
 			Result := logger_instance
 		end
 
+feature -- XML Processing
+
+	parse_xml (a_xml: STRING): SIMPLE_XML_DOCUMENT
+			-- Parse `a_xml' string and return document.
+		require
+			xml_not_void: a_xml /= Void
+		do
+			Result := xml_processor.parse (a_xml)
+		end
+
+	parse_xml_file (a_path: STRING): SIMPLE_XML_DOCUMENT
+			-- Parse XML file at `a_path' and return document.
+		require
+			path_not_void: a_path /= Void
+		do
+			Result := xml_processor.parse_file (a_path)
+		end
+
+	build_xml (a_root_name: STRING): SIMPLE_XML_BUILDER
+			-- Create XML builder with root element named `a_root_name'.
+		require
+			name_not_void: a_root_name /= Void
+			name_not_empty: not a_root_name.is_empty
+		do
+			Result := xml_processor.build (a_root_name)
+		end
+
+	new_xml_document (a_root_name: STRING): SIMPLE_XML_DOCUMENT
+			-- Create empty XML document with root named `a_root_name'.
+		require
+			name_not_void: a_root_name /= Void
+			name_not_empty: not a_root_name.is_empty
+		do
+			Result := xml_processor.new_document (a_root_name)
+		ensure
+			is_valid: Result.is_valid
+		end
+
 feature -- Utilities
 
 	bytes_to_hex (a_bytes: ARRAY [NATURAL_8]): STRING
@@ -573,6 +615,12 @@ feature -- Direct Access
 			Result := logger_instance
 		end
 
+	xml: SIMPLE_XML
+			-- Direct access to XML processor for advanced operations.
+		do
+			Result := xml_processor
+		end
+
 feature {NONE} -- Implementation
 
 	hasher: SIMPLE_HASH
@@ -600,7 +648,9 @@ feature {NONE} -- Implementation
 
 	logger_instance: SIMPLE_LOGGER
 			-- Shared logging engine.
-			-- Random data generator.
+
+	xml_processor: SIMPLE_XML
+			-- XML parsing/building engine.
 
 invariant
 	hasher_exists: hasher /= Void
@@ -612,5 +662,6 @@ invariant
 	process_exists: process_helper /= Void
 	randomizer_exists: randomizer /= Void
 	logger_exists: logger_instance /= Void
+	xml_exists: xml_processor /= Void
 
 end
