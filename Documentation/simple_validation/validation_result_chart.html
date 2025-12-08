@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="generator" content="ISE EiffelStudio version 25.02.9.8732 - win64">
+<meta name="description" content="Result of a validation operation containing success status and any errors"/>
+<meta name="author" content="Larry Rix"/>
+<meta name="keywords" content="Eiffel class"/>
+<meta name="keywords" content="Eiffel class"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css?family=PT+Sans" rel="stylesheet">
+<title>validation_result Chart</title>
+<link rel="stylesheet" href="../default.css" type="text/css">
+<script type="text/javascript" src="../goto.html"></script>
+</head>
+<body>
+<pre></pre><form class="nav" onsubmit="go_to('../',this.c.value);return false;">
+<div class="nav">
+<a class="nav hierarchy" href="../class_list.html">Classes</a>
+<a class="nav hierarchy" href="../cluster_list.html">Clusters</a>
+<a class="nav hierarchy" href="../cluster_hierarchy.html">Cluster hierarchy</a>
+<span class="nav class selected">Chart</span>
+<a class="nav class" href="validation_result_links.html">Relations</a>
+<a class="nav class" href="validation_result_short.html">Contracts</a>
+<span class="nav class goto">Go to: <input name="c" value="validation_result"></span>
+</div></form><pre><span class="ekeyword">class</span>
+	<a class="eclass" href="../simple_validation/validation_result_chart.html">VALIDATION_RESULT</a>
+
+<span class="ekeyword">General</span>
+	<span class="eitag">cluster</span><span class="esymbol">:</span> <span class="necluster">src</span>
+	<span class="eitag">description</span><span class="esymbol">:</span> <span class="estring">&quot;Result of a validation operation containing success status and any errors&quot;</span>
+	<span class="eitag">create</span><span class="esymbol">:</span> <a class="efeature" href="../simple_validation/validation_result_short.html#f_make_valid">make_valid</a><span class="esymbol">,</span> <a class="efeature" href="../simple_validation/validation_result_short.html#f_make_invalid">make_invalid</a>
+
+<span class="ekeyword">Ancestors</span>
+	<a class="eclass" href="../base/any_chart.html">ANY</a>
+
+<span class="ekeyword">Queries</span>
+	<span title="`error_count' is declared in `Current'"><a class="efeature" href="../simple_validation/validation_result_short.html#f_error_count">error_count</a><span class="esymbol">:</span> <a class="eclass" href="../base/integer_32_chart.html">INTEGER_32</a></span>
+	<span title="`error_messages' is declared in `Current'"><a class="efeature" href="../simple_validation/validation_result_short.html#f_error_messages">error_messages</a><span class="esymbol">:</span> <a class="eclass" href="../base/arrayed_list_chart.html">ARRAYED_LIST</a> <span class="esymbol">[</span><a class="eclass" href="../base/string_8_chart.html">STRING_8</a><span class="esymbol">]</span></span>
+	<span title="`errors' is declared in `Current'"><a class="efeature" href="../simple_validation/validation_result_short.html#f_errors">errors</a><span class="esymbol">:</span> <a class="eclass" href="../base/arrayed_list_chart.html">ARRAYED_LIST</a> <span class="esymbol">[</span><a class="eclass" href="../simple_validation/validation_error_chart.html">VALIDATION_ERROR</a><span class="esymbol">]</span></span>
+	<span title="`first_error' is declared in `Current'"><a class="efeature" href="../simple_validation/validation_result_short.html#f_first_error">first_error</a><span class="esymbol">:</span> <span class="ekeyword">detachable</span> <a class="eclass" href="../simple_validation/validation_error_chart.html">VALIDATION_ERROR</a></span>
+	<span title="`has_errors' is declared in `Current'"><a class="efeature" href="../simple_validation/validation_result_short.html#f_has_errors">has_errors</a><span class="esymbol">:</span> <a class="eclass" href="../base/boolean_chart.html">BOOLEAN</a></span>
+	<span title="`is_valid' is declared in `Current'"><a class="efeature" href="../simple_validation/validation_result_short.html#f_is_valid">is_valid</a><span class="esymbol">:</span> <a class="eclass" href="../base/boolean_chart.html">BOOLEAN</a></span>
+	<span title="`to_string' is declared in `Current'"><a class="efeature" href="../simple_validation/validation_result_short.html#f_to_string">to_string</a><span class="esymbol">:</span> <a class="eclass" href="../base/string_8_chart.html">STRING_8</a></span>
+
+<span class="ekeyword">Commands</span>
+	<span title="`add_error' is declared in `Current'"><a class="efeature" href="../simple_validation/validation_result_short.html#f_add_error">add_error</a> <span class="esymbol">(</span><span class="elocal">a_error</span><span class="esymbol">:</span> <a class="eclass" href="../simple_validation/validation_error_chart.html">VALIDATION_ERROR</a><span class="esymbol">)</span></span>
+	<span title="`merge' is declared in `Current'"><a class="efeature" href="../simple_validation/validation_result_short.html#f_merge">merge</a> <span class="esymbol">(</span><span class="elocal">other</span><span class="esymbol">:</span> <a class="eclass" href="../simple_validation/validation_result_chart.html">VALIDATION_RESULT</a><span class="esymbol">)</span></span>
+
+<span class="ekeyword">Constraints</span>
+	<span class="etag">errors not void</span>
+	<span class="etag">valid implies no errors</span>
+	<span class="etag">errors implies invalid</span>
+
+</pre><form class="nav" onsubmit="go_to('../',this.c.value);return false;">
+<div class="nav">
+<a class="nav hierarchy" href="../class_list.html">Classes</a>
+<a class="nav hierarchy" href="../cluster_list.html">Clusters</a>
+<a class="nav hierarchy" href="../cluster_hierarchy.html">Cluster hierarchy</a>
+<span class="nav class selected">Chart</span>
+<a class="nav class" href="validation_result_links.html">Relations</a>
+<a class="nav class" href="validation_result_short.html">Contracts</a>
+<span class="nav class goto">Go to: <input name="c" value="validation_result"></span>
+</div></form><pre></pre>
+<p style="text-align:center;">Generated by <a href="http://www.eiffel.com">ISE EiffelStudio</a></p>
+</body>
+</html>

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="generator" content="ISE EiffelStudio version 25.02.9.8732 - win64">
+<meta name="description" content="Fluent data validation with chainable rules"/>
+<meta name="author" content="Larry Rix"/>
+<meta name="keywords" content="Eiffel class"/>
+<meta name="keywords" content="Eiffel class"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css?family=PT+Sans" rel="stylesheet">
+<title>simple_validator Contracts</title>
+<link rel="stylesheet" href="../default.css" type="text/css">
+<script type="text/javascript" src="../goto.html"></script>
+</head>
+<body>
+<pre></pre><form class="nav" onsubmit="go_to('../',this.c.value);return false;">
+<div class="nav">
+<a class="nav hierarchy" href="../class_list.html">Classes</a>
+<a class="nav hierarchy" href="../cluster_list.html">Clusters</a>
+<a class="nav hierarchy" href="../cluster_hierarchy.html">Cluster hierarchy</a>
+<a class="nav class" href="simple_validator_chart.html">Chart</a>
+<a class="nav class" href="simple_validator_links.html">Relations</a>
+<span class="nav class selected">Contracts</span>
+<span class="nav class goto">Go to: <input name="c" value="simple_validator"></span>
+</div></form><pre><span class="ekeyword">note</span>
+	<span class="eitag">description</span><span class="esymbol">:</span> <span class="estring">&quot;Fluent data validation with chainable rules&quot;</span>
+	<span class="eitag">author</span><span class="esymbol">:</span> <span class="estring">&quot;Larry Rix&quot;</span>
+	<span class="eitag">date</span><span class="esymbol">:</span> <span class="estring">&quot;$Date$&quot;</span>
+	<span class="eitag">revision</span><span class="esymbol">:</span> <span class="estring">&quot;$Revision$&quot;</span>
+
+<span class="ekeyword">class</span> <span class="ekeyword">interface</span>
+	<a class="eclass" href="../simple_validation/simple_validator_short.html">SIMPLE_VALIDATOR</a>
+
+<span class="ekeyword">create</span> 
+	<a class="efeature" href="../simple_validation/simple_validator_short.html#f_make">make</a>
+
+<span class="ekeyword">feature</span> <span class="ecomment">--</span><span class="ecomment"> Access</span>
+
+	<a name="f_field_name"></a><a class="efeature" href="../simple_validation/simple_validator_short.html#f_field_name">field_name</a><span class="esymbol">:</span> <a class="eclass" href="../base/string_8_short.html">STRING_8</a>
+			<span class="ecomment">--</span><span class="ecomment"> Name of field being validated.</span>
+
+	<a name="f_custom_message"></a><a class="efeature" href="../simple_validation/simple_validator_short.html#f_custom_message">custom_message</a><span class="esymbol">:</span> <a class="eclass" href="../base/string_8_short.html">STRING_8</a>
+			<span class="ecomment">--</span><span class="ecomment"> Custom error message to use instead of default.</span>
+	
+<span class="ekeyword">feature</span> <span class="ecomment">--</span><span class="ecomment"> Fluent Configuration: Required</span>
+
+	<a name="f_required"></a><a class="efeature" href="../simple_validation/simple_validator_short.html#f_required">required</a><span class="esymbol">:</span> <a class="eclass" href="../simple_validation/simple_validator_short.html">SIMPLE_VALIDATOR</a>
+			<span class="ecomment">--</span><span class="ecomment"> Add required (non-empty) rule.</span>
+		<span class="ekeyword">ensure</span>
+			<span class="etag">rule_added</span><span class="esymbol">:</span> <a class="efeature" href="../simple_validation/simple_validator_short.html#f_rules">rules</a><span class="edot">.</span><a class="efeature" href="../base/arrayed_list_short.html#f_count">count</a> <span class="esymbol">=</span> <span class="ekeyword">old</span> <a class="efeature" href="../simple_validation/simple_validator_short.html#f_rules">rules</a><span class="edot">.</span><a class="efeature" href="../base/arrayed_list_short.html#f_count">count</a> <a class="esymbol" href="../base/integer_32_short.html#f_plus">+</a> <span class="enumber">1</span>
+			<span class="etag">returns_self</span><span class="esymbol">:</span> <span class="ekeyword">Result</span> <span class="esymbol">=</span> <span class="ekeyword">Current</span>
+	
+<span class="ekeyword">feature</span> <span class="ecomment">--</span><span class="ecomment"> Fluent Configuration: Length</span>
+
+	<a name="f_min_length"></a><a class="efeature" href="../simple_validation/simple_validator_short.html#f_min_length">min_length</a> <span class="esymbol">(</span><span class="elocal">n</span><span class="esymbol">:</span> <a class="eclass" href="../base/integer_32_short.html">INTEGER_32</a><span class="esymbol">)</span><span class="esymbol">:</span> <a class="eclass" href="../simple_validation/simple_validator_short.html">SIMPLE_VALIDATOR</a>
+			<span class="ecomment">--</span><span class="ecomment"> Add minimum length rule.</span>
+		<span class="ekeyword">require</span>
+			<span class="etag">positive</span><span class="esymbol">:</span> <span class="elocal">n</span> <a class="esymbol" href="../base/comparable_short.html#f_is_greater_equal">&gt;=</a> <span class="enumber">0</span>
+		<span class="ekeyword">ensure</span>
+			<span class="etag">rule_added</span><span class="esymbol">:</span> <a class="efeature" href="../simple_validation/simple_validator_short.html#f_rules">rules</a><span class="edot">.</span><a class="efeature" href="../base/arrayed_list_short.html#f_count">count</a> <span class="esymbol">=</span> <span class="ekeyword">old</span> <a class="efeature" href="../simple_validation/simple_validator_short.html#f_rules">rules</a><span class="edot">.</span><a class="efeature" href="../base/arrayed_list_short.html#f_count">count</a> <a class="esymbol" href="../base/integer_32_short.html#f_plus">+</a> <span class="enumber">1</span>
+			<span class="etag">returns_self</span><span class="esymbol">:</span> <span class="ekeyword">Result</span> <span class="esymbol">=</span> <span class="ekeyword">Current</span>
+
+	<a name="f_max_length"></a><a class="efeature" href="../simple_validation/simple_validator_short.html#f_max_length">max_length</a> <span class="esymbol">(</span><span class="elocal">n</span><span class="esymbol">:</span> <a class="eclass" href="../base/integer_32_short.html">INTEGER_32</a><span class="esymbol">)</span><span class="esymbol">:</span> <a class="eclass" href="../simple_validation/simple_validator_short.html">SIMPLE_VALIDATOR</a>
+			<span class="ecomment">--</span><span class="ecomment"> Add maximum length rule.</span>
+		<span class="ekeyword">require</span>
+			<span class="etag">positive</span><span class="esymbol">:</span> <span class="elocal">n</span> <a class="esymbol" href="../base/comparable_short.html#f_is_greater_equal">&gt;=</a> <span class="enumber">0</span>
+		<span class="ekeyword">ensure</span>
+			<span class="etag">rule_added</span><span class="esymbol">:</span> <a class="efeature" href="../simple_validation/simple_validator_short.html#f_rules">rules</a><span class="edot">.</span><a class="efeature" href="../base/arrayed_list_short.html#f_count">count</a> <span class="esymbol">=</span> <span class="ekeyword">old</span> <a class="efeature" href="../simple_validation/simple_validator_short.html#f_rules">rules</a><span class="edot">.</span><a class="efeature" href="../base/arrayed_list_short.html#f_count">count</a> <a class="esymbol" href="../base/integer_32_short.html#f_plus">+</a> <span class="enumber">1</span>
+			<span class="etag">returns_self</span><span class="esymbol">:</span> <span class="ekeyword">Result</span> <span class="esymbol">=</span> <span class="ekeyword">Current</span>
+
+	<a name="f_length_between"></a><a class="efeature" href="../simple_validation/simple_validator_short.html#f_length_between">length_between</a> <span class="esymbol">(</span><span class="elocal">min</span><span class="esymbol">,</span> <span class="elocal">max</span><span class="esymbol">:</span> <a class="eclass" href="../base/integer_32_short.html">INTEGER_32</a><span class="esymbol">)</span><span class="esymbol">:</span> <a class="eclass" href="../simple_validation/simple_validator_short.html">SIMPLE_VALIDATOR</a>
+			<span class="ecomment">--</span><span class="ecomment"> Add length range rule.</span>
+		<span class="ekeyword">require</span>
+			<span class="etag">min_positive</span><span class="esymbol">:</span> <span class="elocal">min</span> <a class="esymbol" href="../base/comparable_short.html#f_is_greater_equal">&gt;=</a> <span class="enumber">0</span>
+			<span class="etag">max_positive</span><span class="esymbol">:</span> <span class="elocal">max</span> <a class="esymbol" href="../base/comparable_short.html#f_is_greater_equal">&gt;=</a> <span class="enumber">0</span>
+			<span class="etag">valid_range</span><span class="esymbol">:</span> <span class="elocal">min</span> <a class="esymbol" href="../base/comparable_short.html#f_is_less_equal">&lt;=</a> <span class="elocal">max</span>
+		<span class="ekeyword">ensure</span>
+			<span class="etag">rules_added</span><span class="esymbol">:</span> <a class="efeature" href="../simple_validation/simple_validator_short.html#f_rules">rules</a><span class="edot">.</span><a class="efeature" href="../base/arrayed_list_short.html#f_count">count</a> <span class="esymbol">=</span> <span class="ekeyword">old</span> <a class="efeature" href="../simple_validation/simple_validator_short.html#f_rules">rules</a><span class="edot">.</span><a class="efeature" href="../base/arrayed_list_short.html#f_count">count</a> <a class="esymbol" href="../base/integer_32_short.html#f_plus">+</a> <span class="enumber">2</span>
+			<span class="etag">returns_self</span><span class="esymbol">:</span> <span class="ekeyword">Result</span> <span class="esymbol">=</span> <span class="ekeyword">Current</span>
+	
+<span class="ekeyword">feature</span> <span class="ecomment">--</span><span class="ecomment"> Fluent Configuration: Numeric</span>
+
+	<a name="f_min_value"></a><a class="efeature" href="../simple_validation/simple_validator_short.html#f_min_value">min_value</a> <span class="esymbol">(</span><span class="elocal">n</span><span class="esymbol">:</span> <a class="eclass" href="../base/real_64_short.html">REAL_64</a><span class="esymbol">)</span><span class="esymbol">:</span> <a class="eclass" href="../simple_validation/simple_validator_short.html">SIMPLE_VALIDATOR</a>
+			<span class="ecomment">--</span><span class="ecomment"> Add minimum value rule.</span>
+		<span class="ekeyword">ensure</span>
+			<span class="etag">rule_added</span><span class="esymbol">:</span> <a class="efeature" href="../simple_validation/simple_validator_short.html#f_rules">rules</a><span class="edot">.</span><a class="efeature" href="../base/arrayed_list_short.html#f_count">count</a> <span class="esymbol">=</span> <span class="ekeyword">old</span> <a class="efeature" href="../simple_validation/simple_validator_short.html#f_rules">rules</a><span class="edot">.</span><a class="efeature" href="../base/arrayed_list_short.html#f_count">count</a> <a class="esymbol" href="../base/integer_32_short.html#f_plus">+</a> <span class="enumber">1</span>
+			<span class="etag">returns_self</span><span class="esymbol">:</span> <span class="ekeyword">Result</span> <span class="esymbol">=</span> <span class="ekeyword">Current</span>
+
+	<a name="f_max_value"></a><a class="efeature" href="../simple_validation/simple_validator_short.html#f_max_value">max_value</a> <span class="esymbol">(</span><span class="elocal">n</span><span class="esymbol">:</span> <a class="eclass" href="../base/real_64_short.html">REAL_64</a><span class="esymbol">)</span><span class="esymbol">:</span> <a class="eclass" href="../simple_validation/simple_validator_short.html">SIMPLE_VALIDATOR</a>
+			<span class="ecomment">--</span><span class="ecomment"> Add maximum value rule.</span>
+		<span class="ekeyword">ensure</span>
+			<span class="etag">rule_added</span><span class="esymbol">:</span> <a class="efeature" href="../simple_validation/simple_validator_short.html#f_rules">rules</a><span class="edot">.</span><a class="efeature" href="../base/arrayed_list_short.html#f_count">count</a> <span class="esymbol">=</span> <span class="ekeyword">old</span> <a class="efeature" href="../simple_validation/simple_validator_short.html#f_rules">rules</a><span class="edot">.</span><a class="efeature" href="../base/arrayed_list_short.html#f_count">count</a> <a class="esymbol" href="../base/integer_32_short.html#f_plus">+</a> <span class="enumber">1</span>
+			<span class="etag">returns_self</span><span class="esymbol">:</span> <span class="ekeyword">Result</span> <span class="esymbol">=</span> <span class="ekeyword">Current</span>
+
+	<a name="f_value_between"></a><a class="efeature" href="../simple_validation/simple_validator_short.html#f_value_between">value_between</a> <span class="esymbol">(</span><span class="elocal">min</span><span class="esymbol">,</span> <span class="elocal">max</span><span class="esymbol">:</span> <a class="eclass" href="../base/real_64_short.html">REAL_64</a><span class="esymbol">)</span><span class="esymbol">:</span> <a class="eclass" href="../simple_validation/simple_validator_short.html">SIMPLE_VALIDATOR</a>
+			<span class="ecomment">--</span><span class="ecomment"> Add value range rule.</span>
+		<span class="ekeyword">require</span>
+			<span class="etag">valid_range</span><span class="esymbol">:</span> <span class="elocal">min</span> <a class="esymbol" href="../base/comparable_short.html#f_is_less_equal">&lt;=</a> <span class="elocal">max</span>
+		<span class="ekeyword">ensure</span>
+			<span class="etag">rules_added</span><span class="esymbol">:</span> <a class="efeature" href="../simple_validation/simple_validator_short.html#f_rules">rules</a><span class="edot">.</span><a class="efeature" href="../base/arrayed_list_short.html#f_count">count</a> <span class="esymbol">=</span> <span class="ekeyword">old</span> <a class="efeature" href="../simple_validation/simple_validator_short.html#f_rules">rules</a><span class="edot">.</span><a class="efeature" href="../base/arrayed_list_short.html#f_count">count</a> <a class="esymbol" href="../base/integer_32_short.html#f_plus">+</a> <span class="enumber">2</span>
+			<span class="etag">returns_self</span><span class="esymbol">:</span> <span class="ekeyword">Result</span> <span class="esymbol">=</span> <span class="ekeyword">Current</span>
+	
+<span class="ekeyword">feature</span> <span class="ecomment">--</span><span class="ecomment"> Fluent Configuration: Pattern</span>
+
+	<a name="f_pattern"></a><a class="efeature" href="../simple_validation/simple_validator_short.html#f_pattern">pattern</a> <span class="esymbol">(</span><span class="elocal">regex</span><span class="esymbol">:</span> <a class="eclass" href="../base/string_8_short.html">STRING_8</a><span class="esymbol">)</span><span class="esymbol">:</span> <a class="eclass" href="../simple_validation/simple_validator_short.html">SIMPLE_VALIDATOR</a>
+			<span class="ecomment">--</span><span class="ecomment"> Add regex pattern rule.</span>
+		<span class="ekeyword">require</span>
+			<span class="etag">regex_not_void</span><span class="esymbol">:</span> <span class="elocal">regex</span> <span class="esymbol">/=</span> <span class="ekeyword">Void</span>
+			<span class="etag">regex_not_empty</span><span class="esymbol">:</span> <a class="ekeyword" href="../base/boolean_short.html#f_negated">not</a> <span class="elocal">regex</span><span class="edot">.</span><a class="efeature" href="../base/finite_short.html#f_is_empty">is_empty</a>
+		<span class="ekeyword">ensure</span>
+			<span class="etag">rule_added</span><span class="esymbol">:</span> <a class="efeature" href="../simple_validation/simple_validator_short.html#f_rules">rules</a><span class="edot">.</span><a class="efeature" href="../base/arrayed_list_short.html#f_count">count</a> <span class="esymbol">=</span> <span class="ekeyword">old</span> <a class="efeature" href="../simple_validation/simple_validator_short.html#f_rules">rules</a><span class="edot">.</span><a class="efeature" href="../base/arrayed_list_short.html#f_count">count</a> <a class="esymbol" href="../base/integer_32_short.html#f_plus">+</a> <span class="enumber">1</span>
+			<span class="etag">returns_self</span><span class="esymbol">:</span> <span class="ekeyword">Result</span> <span class="esymbol">=</span> <span class="ekeyword">Current</span>
+
+	<a name="f_email"></a><a class="efeature" href="../simple_validation/simple_validator_short.html#f_email">email</a><span class="esymbol">:</span> <a class="eclass" href="../simple_validation/simple_validator_short.html">SIMPLE_VALIDATOR</a>
+			<span class="ecomment">--</span><span class="ecomment"> Add email format rule.</span>
+		<span class="ekeyword">ensure</span>
+			<span class="etag">rule_added</span><span class="esymbol">:</span> <a class="efeature" href="../simple_validation/simple_validator_short.html#f_rules">rules</a><span class="edot">.</span><a class="efeature" href="../base/arrayed_list_short.html#f_count">count</a> <span class="esymbol">=</span> <span class="ekeyword">old</span> <a class="efeature" href="../simple_validation/simple_validator_short.html#f_rules">rules</a><span class="edot">.</span><a class="efeature" href="../base/arrayed_list_short.html#f_count">count</a> <a class="esymbol" href="../base/integer_32_short.html#f_plus">+</a> <span class="enumber">1</span>
+			<span class="etag">returns_self</span><span class="esymbol">:</span> <span class="ekeyword">Result</span> <span class="esymbol">=</span> <span class="ekeyword">Current</span>
+
+	<a name="f_url"></a><a class="efeature" href="../simple_validation/simple_validator_short.html#f_url">url</a><span class="esymbol">:</span> <a class="eclass" href="../simple_validation/simple_validator_short.html">SIMPLE_VALIDATOR</a>
+			<span class="ecomment">--</span><span class="ecomment"> Add URL format rule.</span>
+		<span class="ekeyword">ensure</span>
+			<span class="etag">rule_added</span><span class="esymbol">:</span> <a class="efeature" href="../simple_validation/simple_validator_short.html#f_rules">rules</a><span class="edot">.</span><a class="efeature" href="../base/arrayed_list_short.html#f_count">count</a> <span class="esymbol">=</span> <span class="ekeyword">old</span> <a class="efeature" href="../simple_validation/simple_validator_short.html#f_rules">rules</a><span class="edot">.</span><a class="efeature" href="../base/arrayed_list_short.html#f_count">count</a> <a class="esymbol" href="../base/integer_32_short.html#f_plus">+</a> <span class="enumber">1</span>
+			<span class="etag">returns_self</span><span class="esymbol">:</span> <span class="ekeyword">Result</span> <span class="esymbol">=</span> <span class="ekeyword">Current</span>
+
+	<a name="f_uuid"></a><a class="efeature" href="../simple_validation/simple_validator_short.html#f_uuid">uuid</a><span class="esymbol">:</span> <a class="eclass" href="../simple_validation/simple_validator_short.html">SIMPLE_VALIDATOR</a>
+			<span class="ecomment">--</span><span class="ecomment"> Add UUID format rule.</span>
+		<span class="ekeyword">ensure</span>
+			<span class="etag">rule_added</span><span class="esymbol">:</span> <a class="efeature" href="../simple_validation/simple_validator_short.html#f_rules">rules</a><span class="edot">.</span><a class="efeature" href="../base/arrayed_list_short.html#f_count">count</a> <span class="esymbol">=</span> <span class="ekeyword">old</span> <a class="efeature" href="../simple_validation/simple_validator_short.html#f_rules">rules</a><span class="edot">.</span><a class="efeature" href="../base/arrayed_list_short.html#f_count">count</a> <a class="esymbol" href="../base/integer_32_short.html#f_plus">+</a> <span class="enumber">1</span>
+			<span class="etag">returns_self</span><span class="esymbol">:</span> <span class="ekeyword">Result</span> <span class="esymbol">=</span> <span class="ekeyword">Current</span>
+
+	<a name="f_alphanumeric"></a><a class="efeature" href="../simple_validation/simple_validator_short.html#f_alphanumeric">alphanumeric</a><span class="esymbol">:</span> <a class="eclass" href="../simple_validation/simple_validator_short.html">SIMPLE_VALIDATOR</a>
+			<span class="ecomment">--</span><span class="ecomment"> Add alphanumeric-only rule.</span>
+		<span class="ekeyword">ensure</span>
+			<span class="etag">rule_added</span><span class="esymbol">:</span> <a class="efeature" href="../simple_validation/simple_validator_short.html#f_rules">rules</a><span class="edot">.</span><a class="efeature" href="../base/arrayed_list_short.html#f_count">count</a> <span class="esymbol">=</span> <span class="ekeyword">old</span> <a class="efeature" href="../simple_validation/simple_validator_short.html#f_rules">rules</a><span class="edot">.</span><a class="efeature" href="../base/arrayed_list_short.html#f_count">count</a> <a class="esymbol" href="../base/integer_32_short.html#f_plus">+</a> <span class="enumber">1</span>
+			<span class="etag">returns_self</span><span class="esymbol">:</span> <span class="ekeyword">Result</span> <span class="esymbol">=</span> <span class="ekeyword">Current</span>
+
+	<a name="f_numeric"></a><a class="efeature" href="../simple_validation/simple_validator_short.html#f_numeric">numeric</a><span class="esymbol">:</span> <a class="eclass" href="../simple_validation/simple_validator_short.html">SIMPLE_VALIDATOR</a>
+			<span class="ecomment">--</span><span class="ecomment"> Add numeric-only rule (digits only).</span>
+		<span class="ekeyword">ensure</span>
+			<span class="etag">rule_added</span><span class="esymbol">:</span> <a class="efeature" href="../simple_validation/simple_validator_short.html#f_rules">rules</a><span class="edot">.</span><a class="efeature" href="../base/arrayed_list_short.html#f_count">count</a> <span class="esymbol">=</span> <span class="ekeyword">old</span> <a class="efeature" href="../simple_validation/simple_validator_short.html#f_rules">rules</a><span class="edot">.</span><a class="efeature" href="../base/arrayed_list_short.html#f_count">count</a> <a class="esymbol" href="../base/integer_32_short.html#f_plus">+</a> <span class="enumber">1</span>
+			<span class="etag">returns_self</span><span class="esymbol">:</span> <span class="ekeyword">Result</span> <span class="esymbol">=</span> <span class="ekeyword">Current</span>
+	
+<span class="ekeyword">feature</span> <span class="ecomment">--</span><span class="ecomment"> Fluent Configuration: Choices</span>
+
+	<a name="f_one_of"></a><a class="efeature" href="../simple_validation/simple_validator_short.html#f_one_of">one_of</a> <span class="esymbol">(</span><span class="elocal">values</span><span class="esymbol">:</span> <a class="eclass" href="../base/array_short.html">ARRAY</a> <span class="esymbol">[</span><a class="eclass" href="../base/string_8_short.html">STRING_8</a><span class="esymbol">]</span><span class="esymbol">)</span><span class="esymbol">:</span> <a class="eclass" href="../simple_validation/simple_validator_short.html">SIMPLE_VALIDATOR</a>
+			<span class="ecomment">--</span><span class="ecomment"> Add enumeration rule (value must be one of given values).</span>
+		<span class="ekeyword">require</span>
+			<span class="etag">values_not_void</span><span class="esymbol">:</span> <span class="elocal">values</span> <span class="esymbol">/=</span> <span class="ekeyword">Void</span>
+			<span class="etag">values_not_empty</span><span class="esymbol">:</span> <a class="ekeyword" href="../base/boolean_short.html#f_negated">not</a> <span class="elocal">values</span><span class="edot">.</span><a class="efeature" href="../base/finite_short.html#f_is_empty">is_empty</a>
+		<span class="ekeyword">ensure</span>
+			<span class="etag">rule_added</span><span class="esymbol">:</span> <a class="efeature" href="../simple_validation/simple_validator_short.html#f_rules">rules</a><span class="edot">.</span><a class="efeature" href="../base/arrayed_list_short.html#f_count">count</a> <span class="esymbol">=</span> <span class="ekeyword">old</span> <a class="efeature" href="../simple_validation/simple_validator_short.html#f_rules">rules</a><span class="edot">.</span><a class="efeature" href="../base/arrayed_list_short.html#f_count">count</a> <a class="esymbol" href="../base/integer_32_short.html#f_plus">+</a> <span class="enumber">1</span>
+			<span class="etag">returns_self</span><span class="esymbol">:</span> <span class="ekeyword">Result</span> <span class="esymbol">=</span> <span class="ekeyword">Current</span>
+	
+<span class="ekeyword">feature</span> <span class="ecomment">--</span><span class="ecomment"> Fluent Configuration: Customization</span>
+
+	<a name="f_with_message"></a><a class="efeature" href="../simple_validation/simple_validator_short.html#f_with_message">with_message</a> <span class="esymbol">(</span><span class="elocal">msg</span><span class="esymbol">:</span> <a class="eclass" href="../base/string_8_short.html">STRING_8</a><span class="esymbol">)</span><span class="esymbol">:</span> <a class="eclass" href="../simple_validation/simple_validator_short.html">SIMPLE_VALIDATOR</a>
+			<span class="ecomment">--</span><span class="ecomment"> Set custom error message.</span>
+		<span class="ekeyword">require</span>
+			<span class="etag">msg_not_void</span><span class="esymbol">:</span> <span class="elocal">msg</span> <span class="esymbol">/=</span> <span class="ekeyword">Void</span>
+			<span class="etag">msg_not_empty</span><span class="esymbol">:</span> <a class="ekeyword" href="../base/boolean_short.html#f_negated">not</a> <span class="elocal">msg</span><span class="edot">.</span><a class="efeature" href="../base/finite_short.html#f_is_empty">is_empty</a>
+		<span class="ekeyword">ensure</span>
+			<span class="etag">message_set</span><span class="esymbol">:</span> <a class="efeature" href="../simple_validation/simple_validator_short.html#f_custom_message">custom_message</a><span class="edot">.</span><a class="efeature" href="../base/readable_string_8_short.html#f_same_string">same_string</a><span class="esymbol"> </span><span class="esymbol">(</span><span class="elocal">msg</span><span class="esymbol">)</span>
+			<span class="etag">returns_self</span><span class="esymbol">:</span> <span class="ekeyword">Result</span> <span class="esymbol">=</span> <span class="ekeyword">Current</span>
+
+	<a name="f_with_field_name"></a><a class="efeature" href="../simple_validation/simple_validator_short.html#f_with_field_name">with_field_name</a> <span class="esymbol">(</span><span class="elocal">name</span><span class="esymbol">:</span> <a class="eclass" href="../base/string_8_short.html">STRING_8</a><span class="esymbol">)</span><span class="esymbol">:</span> <a class="eclass" href="../simple_validation/simple_validator_short.html">SIMPLE_VALIDATOR</a>
+			<span class="ecomment">--</span><span class="ecomment"> Set field name for error messages.</span>
+		<span class="ekeyword">require</span>
+			<span class="etag">name_not_void</span><span class="esymbol">:</span> <span class="elocal">name</span> <span class="esymbol">/=</span> <span class="ekeyword">Void</span>
+		<span class="ekeyword">ensure</span>
+			<span class="etag">field_name_set</span><span class="esymbol">:</span> <a class="efeature" href="../simple_validation/simple_validator_short.html#f_field_name">field_name</a><span class="edot">.</span><a class="efeature" href="../base/readable_string_8_short.html#f_same_string">same_string</a><span class="esymbol"> </span><span class="esymbol">(</span><span class="elocal">name</span><span class="esymbol">)</span>
+			<span class="etag">returns_self</span><span class="esymbol">:</span> <span class="ekeyword">Result</span> <span class="esymbol">=</span> <span class="ekeyword">Current</span>
+	
+<span class="ekeyword">feature</span> <span class="ecomment">--</span><span class="ecomment"> Validation</span>
+
+	<a name="f_validate"></a><a class="efeature" href="../simple_validation/simple_validator_short.html#f_validate">validate</a> <span class="esymbol">(</span><span class="elocal">value</span><span class="esymbol">:</span> <span class="ekeyword">detachable</span> <a class="eclass" href="../base/any_short.html">ANY</a><span class="esymbol">)</span><span class="esymbol">:</span> <a class="eclass" href="../simple_validation/validation_result_short.html">VALIDATION_RESULT</a>
+			<span class="ecomment">--</span><span class="ecomment"> Validate </span><span class="equoted">value</span><span class="ecomment"> against all rules.</span>
+
+	<a name="f_is_valid"></a><a class="efeature" href="../simple_validation/simple_validator_short.html#f_is_valid">is_valid</a> <span class="esymbol">(</span><span class="elocal">value</span><span class="esymbol">:</span> <span class="ekeyword">detachable</span> <a class="eclass" href="../base/any_short.html">ANY</a><span class="esymbol">)</span><span class="esymbol">:</span> <a class="eclass" href="../base/boolean_short.html">BOOLEAN</a>
+			<span class="ecomment">--</span><span class="ecomment"> Does </span><span class="equoted">value</span><span class="ecomment"> pass all validation rules?</span>
+	
+<span class="ekeyword">invariant</span>
+	<span class="etag">rules_not_void</span><span class="esymbol">:</span> <a class="efeature" href="../simple_validation/simple_validator_short.html#f_rules">rules</a> <span class="esymbol">/=</span> <span class="ekeyword">Void</span>
+	<span class="etag">field_name_not_void</span><span class="esymbol">:</span> <a class="efeature" href="../simple_validation/simple_validator_short.html#f_field_name">field_name</a> <span class="esymbol">/=</span> <span class="ekeyword">Void</span>
+	<span class="etag">custom_message_not_void</span><span class="esymbol">:</span> <a class="efeature" href="../simple_validation/simple_validator_short.html#f_custom_message">custom_message</a> <span class="esymbol">/=</span> <span class="ekeyword">Void</span>
+
+<span class="ekeyword">end</span> <span class="ecomment">--</span> <span class="ecomment">class </span><a class="eclass" href="../simple_validation/simple_validator_short.html">SIMPLE_VALIDATOR</a></pre><form class="nav" onsubmit="go_to('../',this.c.value);return false;">
+<div class="nav">
+<a class="nav hierarchy" href="../class_list.html">Classes</a>
+<a class="nav hierarchy" href="../cluster_list.html">Clusters</a>
+<a class="nav hierarchy" href="../cluster_hierarchy.html">Cluster hierarchy</a>
+<a class="nav class" href="simple_validator_chart.html">Chart</a>
+<a class="nav class" href="simple_validator_links.html">Relations</a>
+<span class="nav class selected">Contracts</span>
+<span class="nav class goto">Go to: <input name="c" value="simple_validator"></span>
+</div></form><pre></pre>
+<p style="text-align:center;">Generated by <a href="http://www.eiffel.com">ISE EiffelStudio</a></p>
+</body>
+</html>
+
