@@ -4,7 +4,7 @@
 
 **Unified Foundation Library for Eiffel Projects**
 
-[Documentation](https://ljr1981.github.io/simple_foundation_api/) | [GitHub](https://github.com/ljr1981/simple_foundation_api)
+[Documentation](https://simple-eiffel.github.io/simple_foundation_api/) | [GitHub](https://github.com/simple-eiffel/simple_foundation_api)
 
 ## Overview
 
@@ -28,15 +28,15 @@ This library bundles the following simple_* libraries:
 
 | Library | Purpose | Environment Variable |
 |---------|---------|---------------------|
-| [simple_base64](https://github.com/ljr1981/simple_base64) | Base64 encoding/decoding | `$SIMPLE_BASE64` |
-| [simple_hash](https://github.com/ljr1981/simple_hash) | Cryptographic hashing | `$SIMPLE_HASH` |
-| [simple_uuid](https://github.com/ljr1981/simple_uuid) | UUID generation | `$SIMPLE_UUID` |
-| [simple_json](https://github.com/ljr1981/simple_json) | JSON parsing/building | `$SIMPLE_JSON` |
-| [simple_csv](https://github.com/ljr1981/simple_csv) | CSV processing | `$SIMPLE_CSV` |
-| [simple_markdown](https://github.com/ljr1981/simple_markdown) | Markdown conversion | `$SIMPLE_MARKDOWN` |
-| [simple_validation](https://github.com/ljr1981/simple_validation) | Data validation | `$SIMPLE_VALIDATION` |
-| [simple_process](https://github.com/ljr1981/simple_process) | Process execution | `$SIMPLE_PROCESS` |
-| [simple_randomizer](https://github.com/ljr1981/simple_randomizer) | Random generation | `$SIMPLE_RANDOMIZER` |
+| [simple_base64](https://github.com/simple-eiffel/simple_base64) | Base64 encoding/decoding | `$SIMPLE_BASE64` |
+| [simple_hash](https://github.com/simple-eiffel/simple_hash) | Cryptographic hashing | `$SIMPLE_HASH` |
+| [simple_uuid](https://github.com/simple-eiffel/simple_uuid) | UUID generation | `$SIMPLE_UUID` |
+| [simple_json](https://github.com/simple-eiffel/simple_json) | JSON parsing/building | `$SIMPLE_JSON` |
+| [simple_csv](https://github.com/simple-eiffel/simple_csv) | CSV processing | `$SIMPLE_CSV` |
+| [simple_markdown](https://github.com/simple-eiffel/simple_markdown) | Markdown conversion | `$SIMPLE_MARKDOWN` |
+| [simple_validation](https://github.com/simple-eiffel/simple_validation) | Data validation | `$SIMPLE_VALIDATION` |
+| [simple_process](https://github.com/simple-eiffel/simple_process) | Process execution | `$SIMPLE_PROCESS` |
+| [simple_randomizer](https://github.com/simple-eiffel/simple_randomizer) | Random generation | `$SIMPLE_RANDOMIZER` |
 
 ## Installation
 
