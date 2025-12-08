@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Testing config updates, AutoTest fixes, .gitignore cleanup
+- Add SCOOP concurrency capability
+- Migrate to simple_testing library
+- Update docs to include all participating libraries
+- Add regex features from simple_regex
+- Add datetime features from simple_datetime
+- Add XML processing integration via simple_xml
+- Remove redundant result_not_void postconditions
+- Rename FOUNDATION to FOUNDATION_API, use composition pattern
+- Add secure_compare and base64_encode_bytes APIs
+
 ## [1.0.0] - 2025-12-08
 
 ### Added
