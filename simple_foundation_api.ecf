@@ -31,6 +31,15 @@
 		<library name="simple_validation" location="$SIMPLE_VALIDATION\simple_validation.ecf"/>
 		<library name="simple_xml" location="$SIMPLE_XML\simple_xml.ecf"/>
 		<library name="simple_regex" location="$SIMPLE_REGEX\simple_regex.ecf"/>
+		<library name="simple_file" location="$SIMPLE_FILE\simple_file.ecf"/>
+		<library name="simple_env" location="$SIMPLE_ENV\simple_env.ecf"/>
+		<library name="simple_config" location="$SIMPLE_CONFIG\simple_config.ecf"/>
+		<library name="simple_toml" location="$SIMPLE_TOML\simple_toml.ecf"/>
+		<library name="simple_yaml" location="$SIMPLE_YAML\simple_yaml.ecf"/>
+		<library name="simple_codec" location="$SIMPLE_CODEC\simple_codec.ecf"/>
+		<library name="simple_encryption" location="$SIMPLE_ENCRYPTION\simple_encryption.ecf"/>
+		<library name="simple_compression" location="$SIMPLE_COMPRESSION\simple_compression.ecf"/>
+		<library name="simple_archive" location="$SIMPLE_ARCHIVE\simple_archive.ecf"/>
 		<cluster name="src" location=".\src\" recursive="true"/>
 	</target>
 	<target name="simple_foundation_api_tests" extends="simple_foundation_api">

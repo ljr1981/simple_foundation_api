@@ -65,6 +65,15 @@ feature {NONE} -- Initialization
 			create xml_processor.make
 			create regex_engine.make
 			create regex_patterns_instance.make
+			-- New helpers
+			create env_helper
+			create config_manager.make
+			create toml_processor
+			create yaml_processor.make
+			create codec_helper.make
+			create encryption_helper.make
+			create compression_helper.make
+			create archive_helper.make
 		ensure
 			hasher_ready: hasher /= Void
 			encoder_ready: encoder /= Void
@@ -78,11 +87,21 @@ feature {NONE} -- Initialization
 			xml_ready: xml_processor /= Void
 			regex_ready: regex_engine /= Void
 			regex_patterns_ready: regex_patterns_instance /= Void
+			env_ready: env_helper /= Void
+			config_ready: config_manager /= Void
+			toml_ready: toml_processor /= Void
+			yaml_ready: yaml_processor /= Void
+			codec_ready: codec_helper /= Void
+			encryption_ready: encryption_helper /= Void
+			compression_ready: compression_helper /= Void
+			archive_ready: archive_helper /= Void
 		end
 
 feature -- Base64 Encoding
 
-	base64_encode (a_input: STRING): STRING
+	base64_encode,
+	encode_base64,
+	to_base64 (a_input: STRING): STRING
 			-- Encode `a_input' to Base64.
 		require
 			input_not_void: a_input /= Void
@@ -90,7 +109,9 @@ feature -- Base64 Encoding
 			Result := encoder.encode (a_input)
 		end
 
-	base64_decode (a_encoded: STRING): STRING
+	base64_decode,
+	decode_base64,
+	from_base64 (a_encoded: STRING): STRING
 			-- Decode Base64 `a_encoded' to original string.
 		require
 			encoded_not_void: a_encoded /= Void
@@ -126,7 +147,9 @@ feature -- Base64 Encoding
 
 feature -- Hashing: SHA-256
 
-	sha256 (a_input: STRING): STRING
+	sha256,
+	hash_sha256,
+	sha256_hash (a_input: STRING): STRING
 			-- Compute SHA-256 hash of `a_input' as 64-char hex string.
 		require
 			input_not_void: a_input /= Void
@@ -235,7 +258,9 @@ feature -- Hashing: Security
 
 feature -- UUID Generation
 
-	new_uuid: STRING
+	new_uuid,
+	generate_uuid,
+	uuid_v4: STRING
 			-- Generate new random UUID v4 as string (36 chars with hyphens).
 			-- Format: xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx
 		do
@@ -264,7 +289,9 @@ feature -- UUID Generation
 
 feature -- JSON Parsing
 
-	parse_json (a_json_text: STRING_32): detachable SIMPLE_JSON_VALUE
+	parse_json,
+	json_parse,
+	from_json (a_json_text: STRING_32): detachable SIMPLE_JSON_VALUE
 			-- Parse `a_json_text' and return JSON value.
 			-- Returns Void on parse error; check `json_has_errors'.
 		require
@@ -354,7 +381,9 @@ feature -- CSV Parsing
 
 feature -- Markdown Conversion
 
-	markdown_to_html (a_markdown: STRING): STRING
+	markdown_to_html,
+	render_markdown,
+	convert_markdown (a_markdown: STRING): STRING
 			-- Convert `a_markdown' to HTML.
 		require
 			markdown_not_void: a_markdown /= Void
@@ -409,12 +438,14 @@ feature -- Validation
 
 feature -- Process Execution
 
-	execute_command (a_command: STRING_32): STRING_32
+	execute_command,
+	run_command,
+	shell (a_command: STRING_32): STRING_32
 			-- Execute shell `a_command' and return output.
 		require
 			command_not_empty: not a_command.is_empty
 		do
-			Result := process_helper.output_of_command (a_command, Void)
+			Result := process_helper.command_output (a_command, Void)
 		end
 
 	execute_command_in_directory (a_command, a_directory: STRING_32): STRING_32
@@ -423,7 +454,7 @@ feature -- Process Execution
 			command_not_empty: not a_command.is_empty
 			directory_not_empty: not a_directory.is_empty
 		do
-			Result := process_helper.output_of_command (a_command, a_directory)
+			Result := process_helper.command_output (a_command, a_directory)
 		end
 
 	has_file_in_path (a_name: STRING): BOOLEAN
@@ -627,13 +658,15 @@ feature -- DateTime Operations
 			create Result.make_from_dates (a_birth_date, a_reference_date)
 		end
 
-	today: SIMPLE_DATE
+	today,
+	current_date: SIMPLE_DATE
 			-- Current date.
 		do
 			create Result.make_now
 		end
 
-	now: SIMPLE_TIME
+	now,
+	current_time: SIMPLE_TIME
 			-- Current time.
 		do
 			create Result.make_now
@@ -647,7 +680,9 @@ feature -- DateTime Operations
 
 feature -- Regular Expressions: Matching
 
-	regex_match (a_pattern, a_subject: READABLE_STRING_GENERAL): SIMPLE_REGEX_MATCH
+	regex_match,
+	match_pattern,
+	find_pattern (a_pattern, a_subject: READABLE_STRING_GENERAL): SIMPLE_REGEX_MATCH
 			-- Match `a_pattern' against `a_subject'.
 		require
 			pattern_attached: a_pattern /= Void
@@ -722,7 +757,9 @@ feature -- Regular Expressions: Replace
 			result_attached: Result /= Void
 		end
 
-	regex_replace_all (a_pattern, a_subject, a_replacement: READABLE_STRING_GENERAL): STRING_32
+	regex_replace_all,
+	replace_all,
+	gsub (a_pattern, a_subject, a_replacement: READABLE_STRING_GENERAL): STRING_32
 			-- Replace all matches of `a_pattern' in `a_subject' with `a_replacement'.
 		require
 			pattern_attached: a_pattern /= Void
@@ -920,6 +957,283 @@ feature -- Direct Access
 			Result := xml_processor
 		end
 
+feature -- Environment Variables
+
+	env_get,
+	get_env,
+	environment (a_name: READABLE_STRING_GENERAL): detachable STRING_32
+			-- Get environment variable `a_name'.
+		require
+			name_not_empty: not a_name.is_empty
+		do
+			Result := env_helper.get (a_name)
+		end
+
+	env_has,
+	has_env (a_name: READABLE_STRING_GENERAL): BOOLEAN
+			-- Does environment variable `a_name' exist?
+		require
+			name_not_empty: not a_name.is_empty
+		do
+			Result := env_helper.has (a_name)
+		end
+
+	env: SIMPLE_ENV
+			-- Direct access to environment helper.
+		do
+			Result := env_helper
+		end
+
+feature -- Configuration Files
+
+	load_config,
+	config_load (a_file_path: STRING): SIMPLE_CONFIG
+			-- Load configuration from file.
+		require
+			path_not_empty: not a_file_path.is_empty
+		do
+			create Result.make_with_file (a_file_path)
+		end
+
+	new_config: SIMPLE_CONFIG
+			-- Create new empty configuration.
+		do
+			create Result.make
+		end
+
+	config: SIMPLE_CONFIG
+			-- Direct access to config manager.
+		do
+			Result := config_manager
+		end
+
+feature -- TOML Processing
+
+	parse_toml,
+	toml_parse (a_toml_text: STRING_32): detachable TOML_TABLE
+			-- Parse TOML text.
+		require
+			not_empty: not a_toml_text.is_empty
+		do
+			Result := toml_processor.parse (a_toml_text)
+		end
+
+	load_toml,
+	toml_load (a_file_path: STRING_32): detachable TOML_TABLE
+			-- Load TOML from file.
+		require
+			path_not_empty: not a_file_path.is_empty
+		do
+			Result := toml_processor.parse_file (a_file_path)
+		end
+
+	toml: SIMPLE_TOML
+			-- Direct access to TOML processor.
+		do
+			Result := toml_processor
+		end
+
+feature -- YAML Processing
+
+	parse_yaml,
+	yaml_parse (a_yaml_text: STRING_32): detachable YAML_VALUE
+			-- Parse YAML text.
+		require
+			not_empty: not a_yaml_text.is_empty
+		do
+			Result := yaml_processor.parse (a_yaml_text)
+		end
+
+	load_yaml,
+	yaml_load (a_file_path: STRING_32): detachable YAML_VALUE
+			-- Load YAML from file.
+		require
+			path_not_empty: not a_file_path.is_empty
+		do
+			Result := yaml_processor.parse_file (a_file_path)
+		end
+
+	yaml: SIMPLE_YAML
+			-- Direct access to YAML processor.
+		do
+			Result := yaml_processor
+		end
+
+feature -- Format Conversion (Codec)
+
+	convert_json_to_toml (a_json: STRING_32): STRING_32
+			-- Convert JSON to TOML format.
+		require
+			json_not_void: a_json /= Void
+		do
+			if attached codec_helper.parse_json (a_json) as l_val then
+				Result := codec_helper.to_toml (l_val)
+			else
+				create Result.make_empty
+			end
+		end
+
+	convert_json_to_yaml (a_json: STRING_32): STRING_32
+			-- Convert JSON to YAML format.
+		require
+			json_not_void: a_json /= Void
+		do
+			if attached codec_helper.parse_json (a_json) as l_val then
+				Result := codec_helper.to_yaml (l_val)
+			else
+				create Result.make_empty
+			end
+		end
+
+	convert_toml_to_json (a_toml: STRING_32): STRING_32
+			-- Convert TOML to JSON format.
+		require
+			toml_not_void: a_toml /= Void
+		do
+			if attached codec_helper.parse_toml (a_toml) as l_val then
+				Result := codec_helper.to_json (l_val)
+			else
+				create Result.make_empty
+			end
+		end
+
+	codec: SIMPLE_CODEC
+			-- Direct access to codec helper for format conversion.
+		do
+			Result := codec_helper
+		end
+
+feature -- Password Security
+
+	hash_password,
+	secure_password (a_password: STRING): STRING
+			-- Hash password using PBKDF2-SHA256 with random salt.
+			-- Returns: salt$iterations$hash (all hex-encoded)
+		require
+			password_not_empty: not a_password.is_empty
+		do
+			Result := encryption_helper.hash_password (a_password)
+		end
+
+	verify_password,
+	check_password (a_password, a_stored_hash: STRING): BOOLEAN
+			-- Verify password against stored hash from `hash_password'.
+		require
+			password_not_empty: not a_password.is_empty
+			hash_not_empty: not a_stored_hash.is_empty
+		do
+			Result := encryption_helper.verify_password (a_password, a_stored_hash)
+		end
+
+	encryption: SIMPLE_ENCRYPTION
+			-- Direct access to encryption helper for hashing/HMAC.
+		do
+			Result := encryption_helper
+		end
+
+feature -- Compression
+
+	compress,
+	deflate (a_data: STRING): STRING
+			-- Compress `a_data' using zlib.
+		require
+			data_not_void: a_data /= Void
+		do
+			Result := compression_helper.compress_string (a_data)
+		end
+
+	decompress,
+	inflate (a_compressed: STRING): STRING
+			-- Decompress `a_compressed' data.
+		require
+			compressed_not_void: a_compressed /= Void
+		do
+			Result := compression_helper.decompress_string (a_compressed)
+		end
+
+	compression: SIMPLE_COMPRESSION
+			-- Direct access to compression helper.
+		do
+			Result := compression_helper
+		end
+
+feature -- Archives
+
+	extract_archive,
+	unzip (a_archive_path, a_destination: STRING)
+			-- Extract archive to destination.
+		require
+			archive_not_empty: not a_archive_path.is_empty
+			destination_not_empty: not a_destination.is_empty
+		do
+			archive_helper.extract_archive (a_archive_path, a_destination)
+		end
+
+	create_archive,
+	zip (a_source_directory, a_archive_path: STRING)
+			-- Create archive from source directory.
+		require
+			source_not_empty: not a_source_directory.is_empty
+			archive_not_empty: not a_archive_path.is_empty
+		do
+			archive_helper.create_archive_from_directory (a_archive_path, a_source_directory)
+		end
+
+	archive: SIMPLE_ARCHIVE
+			-- Direct access to archive helper.
+		do
+			Result := archive_helper
+		end
+
+feature -- File Operations
+
+	new_file,
+	file (a_path: READABLE_STRING_GENERAL): SIMPLE_FILE
+			-- Create file object for path.
+		require
+			path_not_empty: not a_path.is_empty
+		do
+			create Result.make (a_path)
+		end
+
+	read_file,
+	file_contents (a_path: READABLE_STRING_GENERAL): detachable STRING
+			-- Read entire file contents.
+		require
+			path_not_empty: not a_path.is_empty
+		local
+			l_file: SIMPLE_FILE
+		do
+			create l_file.make (a_path)
+			if l_file.exists then
+				Result := l_file.read_all
+			end
+		end
+
+	write_file,
+	save_file (a_path: READABLE_STRING_GENERAL; a_content: STRING)
+			-- Write content to file.
+		require
+			path_not_empty: not a_path.is_empty
+			content_not_void: a_content /= Void
+		local
+			l_file: SIMPLE_FILE
+		do
+			create l_file.make (a_path)
+			l_file.write_text (a_content).do_nothing
+		end
+
+	file_exists (a_path: READABLE_STRING_GENERAL): BOOLEAN
+			-- Does file exist?
+		require
+			path_not_empty: not a_path.is_empty
+		local
+			l_file: SIMPLE_FILE
+		do
+			create l_file.make (a_path)
+			Result := l_file.exists
+		end
+
 feature {NONE} -- Implementation
 
 	hasher: SIMPLE_HASH
@@ -957,6 +1271,31 @@ feature {NONE} -- Implementation
 	regex_patterns_instance: SIMPLE_REGEX_PATTERNS
 			-- Common regex patterns library.
 
+	env_helper: SIMPLE_ENV
+			-- Environment variable access.
+
+	config_manager: SIMPLE_CONFIG
+			-- Configuration file manager.
+
+	toml_processor: SIMPLE_TOML
+			-- TOML parsing/writing engine.
+
+	yaml_processor: SIMPLE_YAML
+			-- YAML parsing/writing engine.
+
+
+	codec_helper: SIMPLE_CODEC
+			-- Encoding/decoding helper.
+
+	encryption_helper: SIMPLE_ENCRYPTION
+			-- Encryption helper.
+
+	compression_helper: SIMPLE_COMPRESSION
+			-- Compression helper.
+
+	archive_helper: SIMPLE_ARCHIVE
+			-- Archive handling helper.
+
 invariant
 	hasher_exists: hasher /= Void
 	encoder_exists: encoder /= Void
@@ -970,5 +1309,13 @@ invariant
 	xml_exists: xml_processor /= Void
 	regex_exists: regex_engine /= Void
 	regex_patterns_exists: regex_patterns_instance /= Void
+	env_exists: env_helper /= Void
+	config_exists: config_manager /= Void
+	toml_exists: toml_processor /= Void
+	yaml_exists: yaml_processor /= Void
+	codec_exists: codec_helper /= Void
+	encryption_exists: encryption_helper /= Void
+	compression_exists: compression_helper /= Void
+	archive_exists: archive_helper /= Void
 
 end
